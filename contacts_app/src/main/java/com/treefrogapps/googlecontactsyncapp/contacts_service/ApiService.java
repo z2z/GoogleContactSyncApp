@@ -5,13 +5,13 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.treefrogapps.googlecontactsyncapp.contacts_activity.model.LoginUtils;
+import com.treefrogapps.googlecontactsyncapp.common.LoginAccessIntent;
 import com.treefrogapps.googlecontactsyncapp.contacts_service.clients.ContactsApiClient;
 import com.treefrogapps.googlecontactsyncapp.contacts_service.clients.PeopleApiClient;
-import com.treefrogapps.googlecontactsyncapp.contacts_service.di.LoginServiceModule;
+import com.treefrogapps.googlecontactsyncapp.contacts_service.di.ApiServiceModule;
 
 import java.io.IOException;
 
@@ -25,10 +25,17 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.treefrogapps.googlecontactsyncapp.application.ContactsApplication.*;
-import static com.treefrogapps.googlecontactsyncapp.contacts_activity.model.LoginUtils.*;
+import static com.treefrogapps.googlecontactsyncapp.application.ContactsApplication.getApplicationComponent;
+import static com.treefrogapps.googlecontactsyncapp.contacts_activity.model.LoginUtils.AUTH_TOKEN_END_POINT;
+import static com.treefrogapps.googlecontactsyncapp.contacts_activity.model.LoginUtils.CLIENT_API_ID;
+import static com.treefrogapps.googlecontactsyncapp.contacts_activity.model.LoginUtils.REDIRECT_URI;
+import static com.treefrogapps.googlecontactsyncapp.contacts_service.ApiUtils.getAccessToken;
+import static com.treefrogapps.googlecontactsyncapp.contacts_service.ApiUtils.getRefreshToken;
 
 public class ApiService extends Service {
+
+    // https://people.googleapis.com/v1/people/me/connections - get request  : people request (add access token as header?)
+    // https://www.google.com/m8/feeds/contacts/default/full/ - get request  : contacts request (add access token as header?)
 
     private static final String TAG = ApiService.class.getSimpleName();
 
@@ -40,7 +47,7 @@ public class ApiService extends Service {
 
     @Override public void onCreate() {
         super.onCreate();
-        getApplicationComponent(this).addContactsLoginService(new LoginServiceModule()).inject(this);
+        getApplicationComponent(this).addContactsLoginService(new ApiServiceModule()).inject(this);
         loginServiceBinder = new LoginServiceBinder(this);
     }
 
@@ -87,7 +94,12 @@ public class ApiService extends Service {
                 @Override public void onResponse(Call call, Response response) throws IOException {
                     Log.i(TAG, "Response Code : " + response.code());
                     if(response.isSuccessful()){
+                        String responseString = response.body().string();
                         Log.i(TAG, response.body().string());
+
+                        LocalBroadcastManager.getInstance(ApiService.this)
+                                .sendBroadcast(new LoginAccessIntent(getAccessToken(responseString), getRefreshToken(responseString)));
+
                     }
                 }
             });

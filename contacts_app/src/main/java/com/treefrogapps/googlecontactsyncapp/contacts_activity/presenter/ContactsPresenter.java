@@ -1,6 +1,10 @@
 package com.treefrogapps.googlecontactsyncapp.contacts_activity.presenter;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 
 import com.treefrogapps.googlecontactsyncapp.common.base_classes.BasePresenter;
@@ -17,6 +21,8 @@ import io.reactivex.Observable;
 
 public class ContactsPresenter extends BasePresenter<MVP.IContactsPresenter, MVP.IContactsModel, ContactsModel>
         implements MVP.IContactsViewPresenter, MVP.IContactsPresenter, IContext {
+
+    private static final String[] permissions = new String[] {Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS};
 
     private ContactsModel contactsModel;
     private FragmentManager manager;
@@ -54,7 +60,7 @@ public class ContactsPresenter extends BasePresenter<MVP.IContactsPresenter, MVP
     }
 
     @Override public void onDestroy(boolean isFinishing) {
-
+        if(isFinishing) getModel().onDestroy();
     }
 
     @Override public Context getAppContext() {
@@ -73,7 +79,15 @@ public class ContactsPresenter extends BasePresenter<MVP.IContactsPresenter, MVP
     }
 
     @Override public void getAccessToken(String redirectUri) {
-        getModel().getAccessToken(redirectUri);
+        getModel().requestAccessToken(redirectUri);
+    }
+
+    @Override public boolean hasPermissions() {
+        return checkPermissions(permissions);
+    }
+
+    @Override public void requestPermissions(Activity activity, int requestCode) {
+        ActivityCompat.requestPermissions(activity, permissions, requestCode);
     }
 
     @Override public Observable<List<Contact>> getContactsObservable() {
@@ -84,10 +98,22 @@ public class ContactsPresenter extends BasePresenter<MVP.IContactsPresenter, MVP
         return getModel().getPeopleObservable();
     }
 
+    @Override public void revokeAccess() {
+        getModel().revokeAccess();
+    }
+
     @Override public void results(String results) {
 
     }
 
-
+    private boolean checkPermissions(String[] permissions) {
+        for (String permission : permissions) {
+            if (PackageManager.PERMISSION_GRANTED
+                    != ActivityCompat.checkSelfPermission(getActivityContext(), permission)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

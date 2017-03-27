@@ -3,8 +3,8 @@ package com.treefrogapps.googlecontactsyncapp.application.di;
 import com.treefrogapps.googlecontactsyncapp.common.di_scopes.ApplicationScope;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.di.ContactsActivityComponent;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.di.ContactsActivityModule;
-import com.treefrogapps.googlecontactsyncapp.contacts_service.di.LoginServiceComponent;
-import com.treefrogapps.googlecontactsyncapp.contacts_service.di.LoginServiceModule;
+import com.treefrogapps.googlecontactsyncapp.contacts_service.di.ApiServiceComponent;
+import com.treefrogapps.googlecontactsyncapp.contacts_service.di.ApiServiceModule;
 
 import dagger.Component;
 
@@ -12,5 +12,5 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     ContactsActivityComponent addContactsComponent(ContactsActivityModule contactsActivityModule);
-    LoginServiceComponent addContactsLoginService(LoginServiceModule serviceModule);
+    ApiServiceComponent addContactsLoginService(ApiServiceModule serviceModule);
 }

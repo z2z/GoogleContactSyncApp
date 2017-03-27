@@ -40,6 +40,8 @@ dependencies {
     compile project.ext.deps.rxandroid
     compile project.ext.deps.okhttp
     compile project.ext.deps.jackson
+    compile project.ext.deps.jackson_annotations
+    compile project.ext.deps.jackson_databind
     compile project.ext.deps.butterknife
     annotationProcessor project.ext.deps.butterknife_compiler
     testCompile project.ext.deps.junit

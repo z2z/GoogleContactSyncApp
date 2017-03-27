@@ -1,19 +1,19 @@
 package com.treefrogapps.googlecontactsyncapp.contacts_activity.view;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import com.treefrogapps.googlecontactsyncapp.R;
 import com.treefrogapps.googlecontactsyncapp.common.base_classes.BaseActivity;
 import com.treefrogapps.googlecontactsyncapp.common.base_interfaces.IContext;
-import com.treefrogapps.googlecontactsyncapp.R;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.MVP;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.di.ContactsActivityModule;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.presenter.ContactsPresenter;
@@ -27,11 +27,14 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.Observable;
 
-import static com.treefrogapps.googlecontactsyncapp.application.ContactsApplication.*;
-import static com.treefrogapps.googlecontactsyncapp.contacts_activity.view.ContactsFragment.*;
+import static com.treefrogapps.googlecontactsyncapp.application.ContactsApplication.getApplicationComponent;
+import static com.treefrogapps.googlecontactsyncapp.contacts_activity.view.ContactsFragment.OnFragmentListener;
 
 public class ContactsActivity extends BaseActivity<MVP.IContactsView, MVP.IContactsViewPresenter, ContactsPresenter>
         implements IContext, MVP.IContactsView, OnFragmentListener {
+
+    private static final String TAG = ContactsActivity.class.getSimpleName();
+    private static final int PERMISSION_REQUEST_CODE = 10;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.tab_layout) TabLayout tabLayout;
@@ -86,10 +89,33 @@ public class ContactsActivity extends BaseActivity<MVP.IContactsView, MVP.IConta
         switch (item.getItemId()){
 
             case R.id.menu_get_contacts :
-                getPresenter().getAuthConsent();
+                if(getPresenter().hasPermissions()) {
+                    getPresenter().getAuthConsent();
+                } else {
+                    getPresenter().requestPermissions(this, PERMISSION_REQUEST_CODE);
+                }
                 return true;
-            default: return super.onOptionsItemSelected(item);
+            case R.id.menu_remove_access :
+                getPresenter().revokeAccess();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        boolean hasPermissions = true;
+
+        if(requestCode == PERMISSION_REQUEST_CODE){
+            for(int result: grantResults){
+                if(result != PackageManager.PERMISSION_GRANTED){
+                    hasPermissions = false;
+                }
+            }
+            if(hasPermissions) getPresenter().getAuthConsent();
+        }
+
     }
 
     @Override protected void onStart() {

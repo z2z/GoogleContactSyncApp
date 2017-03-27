@@ -3,7 +3,9 @@ package com.treefrogapps.googlecontactsyncapp.contacts_activity.model;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.IBinder;
 
@@ -15,8 +17,13 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 
 import static android.content.Context.BIND_AUTO_CREATE;
+import static com.treefrogapps.googlecontactsyncapp.common.LoginAccessIntent.ACCESS_TOKEN_EXTRA;
+import static com.treefrogapps.googlecontactsyncapp.common.LoginAccessIntent.ACTION_LOGIN_SUCCESSFUL;
+import static com.treefrogapps.googlecontactsyncapp.common.LoginAccessIntent.REFRESH_TOKEN_EXTRA;
+import static com.treefrogapps.googlecontactsyncapp.common.RxUtils.RxBroadcastReceiver;
 import static com.treefrogapps.googlecontactsyncapp.contacts_activity.model.LoginUtils.CLIENT_API_ID;
 import static com.treefrogapps.googlecontactsyncapp.contacts_activity.model.LoginUtils.OAUTH_URL;
 import static com.treefrogapps.googlecontactsyncapp.contacts_activity.model.LoginUtils.REDIRECT_URI;
@@ -26,15 +33,21 @@ public class ContactsModel implements MVP.IContactsModel {
 
     private WeakReference<MVP.IContactsPresenter> presenterRef;
     private ContentResolver resolver;
+    private SharedPreferences preferences;
     private ApiService apiService;
     private boolean boundToService;
+    private Disposable disposable;
 
-    public ContactsModel(ContentResolver resolver) {
+    private String accessToken;
+
+    public ContactsModel(ContentResolver resolver, SharedPreferences preferences) {
         this.resolver = resolver;
+        this.preferences = preferences;
     }
 
     @Override public void onCreate(MVP.IContactsPresenter contactsPresenter) {
         this.presenterRef = new WeakReference<>(contactsPresenter);
+
     }
 
     @Override public void onConfigChange(MVP.IContactsPresenter contactsPresenter) {
@@ -45,6 +58,10 @@ public class ContactsModel implements MVP.IContactsModel {
         presenterRef.get().getActivityContext()
                 .bindService(new Intent(presenterRef.get().getActivityContext(), ApiService.class),
                         loginServiceConnection, BIND_AUTO_CREATE);
+
+        disposable = RxBroadcastReceiver(presenterRef.get().getAppContext(),
+                new IntentFilter(ACTION_LOGIN_SUCCESSFUL), true).subscribe(this::serviceCallback);
+
     }
 
     @Override public void onResume() {
@@ -57,6 +74,7 @@ public class ContactsModel implements MVP.IContactsModel {
 
     @Override public void onStop() {
         presenterRef.get().getActivityContext().unbindService(loginServiceConnection);
+        disposable.dispose();
     }
 
     @Override public void onDestroy() {
@@ -70,7 +88,7 @@ public class ContactsModel implements MVP.IContactsModel {
         presenterRef.get().getActivityContext().startActivity(intent);
     }
 
-    @Override public void getAccessToken(String redirectUri) {
+    @Override public void requestAccessToken(String redirectUri) {
         if(boundToService) apiService.requestAccessToken(redirectUri);
     }
 
@@ -84,6 +102,12 @@ public class ContactsModel implements MVP.IContactsModel {
         return null;
     }
 
+    @Override public void revokeAccess() {
+        accessToken = null;
+        preferences.edit().clear().apply();
+        // TODO - clear Observable / PublishSubject call onNext(emptyList)
+    }
+
     private ServiceConnection loginServiceConnection = new ServiceConnection() {
         @Override public void onServiceConnected(ComponentName name, IBinder service) {
             ApiService.LoginServiceBinder binder = (ApiService.LoginServiceBinder) service;
@@ -95,4 +119,9 @@ public class ContactsModel implements MVP.IContactsModel {
             boundToService = false;
         }
     };
+
+    private void serviceCallback(Intent intent){
+        accessToken = intent.getStringExtra(ACCESS_TOKEN_EXTRA);
+        preferences.edit().putString(REFRESH_TOKEN_EXTRA, intent.getStringExtra(REFRESH_TOKEN_EXTRA)).apply();
+    }
 }

@@ -1,6 +1,7 @@
 package com.treefrogapps.googlecontactsyncapp.contacts_activity.di;
 
 import android.content.ContentResolver;
+import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
 
 import com.treefrogapps.googlecontactsyncapp.common.di_scopes.ActivityScope;
@@ -26,8 +27,8 @@ import dagger.Provides;
 
     @Module public static class ApplicationScoped {
 
-        @Provides @ApplicationScope ContactsModel provideModel(ContentResolver resolver) {
-            return new ContactsModel(resolver);
+        @Provides @ApplicationScope ContactsModel provideModel(ContentResolver resolver, SharedPreferences preferences) {
+            return new ContactsModel(resolver, preferences);
         }
     }
 }
