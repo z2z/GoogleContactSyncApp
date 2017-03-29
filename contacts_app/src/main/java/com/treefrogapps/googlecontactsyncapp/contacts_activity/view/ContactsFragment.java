@@ -20,14 +20,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 
 public class ContactsFragment extends Fragment {
 
-    static ContactsFragment newInstance(Bundle bundle){
+    private int fragmentPosition;
+
+    static ContactsFragment newInstance(Bundle bundle) {
         ContactsFragment fragment = new ContactsFragment();
-        if(bundle != null) fragment.setArguments(bundle);
+        if (bundle != null) fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -41,13 +44,14 @@ public class ContactsFragment extends Fragment {
     @BindView(R.id.fragment_text_view) TextView fragmentTextView;
 
     interface OnFragmentListener {
-        Observable<List<Contact>> getContactsApiObservable();
-        Observable<List<Contact>> getPeopleApiObservable();
+        Observable<List<Contact>> getContactsApiSubject();
+
+        Observable<List<Contact>> getPeopleApiSubject();
     }
 
     @Override public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof ContactsActivity) {
+        if (context instanceof ContactsActivity) {
             fragmentListener = (OnFragmentListener) context;
         }
     }
@@ -64,22 +68,29 @@ public class ContactsFragment extends Fragment {
         contactRecyclerAdapter = new ContactRecyclerAdapter(contactList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(contactRecyclerAdapter);
-        int position = getArguments().getInt("POSITION", 10);
-        if(position == 0) {
-           // TODO disposable = fragmentListener.getContactsApiObservable().subscribe(this::updateRecyclerView);
-            fragmentTextView.setText("Contacts from Api");
-        } else if(position == 1){
-           // TODO disposable = fragmentListener.getPeopleApiObservable().subscribe(this::updateRecyclerView);
-            fragmentTextView.setText("People from Api");
-        }
+        fragmentPosition = getArguments().getInt("POSITION", 10);
     }
 
     @Override public void onResume() {
         super.onResume();
+
+        if (fragmentPosition == 0) {
+            disposable = fragmentListener.getContactsApiSubject().
+                    observeOn(AndroidSchedulers.mainThread()).subscribe(this::updateRecyclerView);
+
+            fragmentTextView.setText(getActivity().getString(R.string.contacts_from_api));
+
+        } else if (fragmentPosition == 1) {
+            disposable = fragmentListener.getPeopleApiSubject()
+                    .observeOn(AndroidSchedulers.mainThread()).subscribe(this::updateRecyclerView);
+
+            fragmentTextView.setText(getActivity().getString(R.string.people_from_api));
+        }
     }
 
     @Override public void onPause() {
         super.onPause();
+        if (disposable != null && !disposable.isDisposed()) disposable.dispose();
     }
 
     @Override public void onDetach() {
@@ -94,10 +105,9 @@ public class ContactsFragment extends Fragment {
 
     @Override public void onDestroy() {
         super.onDestroy();
-        if(disposable != null && !disposable.isDisposed()) disposable.dispose();
     }
 
-    private void updateRecyclerView(List<Contact> contactList){
+    private void updateRecyclerView(List<Contact> contactList) {
         this.contactList.clear();
         this.contactList.addAll(contactList);
         contactRecyclerAdapter.notifyDataSetChanged();

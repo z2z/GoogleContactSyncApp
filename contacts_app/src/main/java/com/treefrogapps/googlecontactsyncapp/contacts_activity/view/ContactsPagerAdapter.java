@@ -4,11 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.view.ViewGroup;
 
 import java.util.WeakHashMap;
 
-import static com.treefrogapps.googlecontactsyncapp.contacts_activity.view.ContactsFragment.*;
+import static com.treefrogapps.googlecontactsyncapp.contacts_activity.view.ContactsFragment.newInstance;
 
 
 public class ContactsPagerAdapter extends FragmentStatePagerAdapter {
@@ -32,16 +31,16 @@ public class ContactsPagerAdapter extends FragmentStatePagerAdapter {
         return tabTitles.length;
     }
 
-    private Fragment getFragment(int position){
+    private Fragment getFragment(int position) {
         Fragment fragment = fragmentWeakHashMap.get(position);
-        if(fragment != null){
+        if (fragment != null) {
             return fragment;
         } else {
             Bundle bundle = new Bundle();
             bundle.putInt("POSITION", position);
             fragment = newInstance(bundle);
             fragmentWeakHashMap.put(position, fragment);
-            return  fragment;
+            return fragment;
         }
     }
 

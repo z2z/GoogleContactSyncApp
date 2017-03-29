@@ -10,7 +10,7 @@ abstract class ApiClient {
         this.client = client;
     }
 
-    public OkHttpClient getClient(){
+    public OkHttpClient getClient() {
         return client;
     }
 }

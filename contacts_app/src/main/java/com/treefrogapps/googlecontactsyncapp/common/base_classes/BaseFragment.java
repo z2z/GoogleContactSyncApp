@@ -11,18 +11,19 @@ public abstract class BaseFragment<IView, IViewPresenter, Presenter extends IPre
 
     private Presenter presenter;
 
-    public void initialise(Presenter presenter, IView view, boolean savedInstance){
+    public void initialise(Presenter presenter, IView view, boolean savedInstance) {
         this.presenter = presenter;
-        if(!savedInstance) {
+        if (!savedInstance) {
             presenter.onCreate(view);
         } else {
             presenter.onConfigChange(view);
         }
     }
 
-    @SuppressWarnings("unchecked") public IViewPresenter getPresenter(){
+    @SuppressWarnings("unchecked") public IViewPresenter getPresenter() {
         return (IViewPresenter) presenter;
     }
+
     @Override public Context getAppContext() {
         return getActivity().getApplicationContext();
     }

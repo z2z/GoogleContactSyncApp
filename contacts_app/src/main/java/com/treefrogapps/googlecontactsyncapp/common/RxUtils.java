@@ -11,7 +11,7 @@ import io.reactivex.Observable;
 
 public final class RxUtils {
 
-    public static Observable<Intent> RxBroadcastReceiver(Context context, IntentFilter filter, boolean localBroadcast){
+    public static Observable<Intent> RxBroadcastReceiver(Context context, IntentFilter filter, boolean localBroadcast) {
         return Observable.create(e -> {
 
             final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -20,7 +20,7 @@ public final class RxUtils {
                 }
             };
 
-            if(localBroadcast){
+            if (localBroadcast) {
                 LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
                 e.setCancellable(() -> LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver));
             } else {

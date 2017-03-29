@@ -1,27 +1,35 @@
 package com.treefrogapps.googlecontactsyncapp.contacts_activity.view;
 
 
+import android.support.annotation.Nullable;
+
 public class Contact {
 
-    private String item1;
-    private String item2;
-    private String item3;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+    private String imageUrl;
 
-    public Contact(String item1, String item2, String item3) {
-        this.item1 = item1;
-        this.item2 = item2;
-        this.item3 = item3;
+    public Contact(String firstName, String lastName, String phoneNumber, @Nullable String imageUrl) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.imageUrl = imageUrl;
     }
 
-    public String getItem1() {
-        return item1;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getItem2() {
-        return item2;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getItem3() {
-        return item3;
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

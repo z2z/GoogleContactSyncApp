@@ -20,7 +20,7 @@ public class ContactsApplication extends Application {
                 .build();
     }
 
-    public static ApplicationComponent getApplicationComponent(Context context){
-        return ((ContactsApplication)context.getApplicationContext()).applicationComponent;
+    public static ApplicationComponent getApplicationComponent(Context context) {
+        return ((ContactsApplication) context.getApplicationContext()).applicationComponent;
     }
 }

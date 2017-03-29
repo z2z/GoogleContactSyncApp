@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 
 import com.treefrogapps.googlecontactsyncapp.common.base_classes.BasePresenter;
 import com.treefrogapps.googlecontactsyncapp.common.base_interfaces.IContext;
@@ -22,13 +23,14 @@ import io.reactivex.Observable;
 public class ContactsPresenter extends BasePresenter<MVP.IContactsPresenter, MVP.IContactsModel, ContactsModel>
         implements MVP.IContactsViewPresenter, MVP.IContactsPresenter, IContext {
 
-    private static final String[] permissions = new String[] {Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS};
+    private static final String TAG = ContactsPresenter.class.getSimpleName();
+    private static final String[] permissions = new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS};
 
     private ContactsModel contactsModel;
     private FragmentManager manager;
     private WeakReference<MVP.IContactsView> contactsViewRef;
 
-    public ContactsPresenter(ContactsModel contactsModel, FragmentManager manager){
+    public ContactsPresenter(ContactsModel contactsModel, FragmentManager manager) {
         this.contactsModel = contactsModel;
         this.manager = manager;
     }
@@ -44,7 +46,7 @@ public class ContactsPresenter extends BasePresenter<MVP.IContactsPresenter, MVP
     }
 
     @Override public void onStart() {
-       getModel().onStart();
+        getModel().onStart();
     }
 
     @Override public void onResume() {
@@ -60,7 +62,7 @@ public class ContactsPresenter extends BasePresenter<MVP.IContactsPresenter, MVP
     }
 
     @Override public void onDestroy(boolean isFinishing) {
-        if(isFinishing) getModel().onDestroy();
+        if (isFinishing) getModel().onDestroy();
     }
 
     @Override public Context getAppContext() {
@@ -82,6 +84,10 @@ public class ContactsPresenter extends BasePresenter<MVP.IContactsPresenter, MVP
         getModel().requestAccessToken(redirectUri);
     }
 
+    @Override public boolean hasAccessOrRefreshToken() {
+        return getModel().hasAccessAndRefreshToken();
+    }
+
     @Override public boolean hasPermissions() {
         return checkPermissions(permissions);
     }
@@ -90,20 +96,25 @@ public class ContactsPresenter extends BasePresenter<MVP.IContactsPresenter, MVP
         ActivityCompat.requestPermissions(activity, permissions, requestCode);
     }
 
-    @Override public Observable<List<Contact>> getContactsObservable() {
+    @Override public Observable<List<Contact>> getContactsSubject() {
         return getModel().getContactsObservable();
     }
 
-    @Override public Observable<List<Contact>> getPeopleObservable() {
-        return getModel().getPeopleObservable();
+    @Override public Observable<List<Contact>> getPeopleSubject() {
+        return getModel().getPeopleSubjectObservable();
     }
+
 
     @Override public void revokeAccess() {
         getModel().revokeAccess();
     }
 
-    @Override public void results(String results) {
+    @Override public void makeApiCall() {
+        getModel().makeApiCall();
+    }
 
+    @Override public void authSuccessful(boolean successful) {
+        Log.i(TAG, "Login successful = " + successful);
     }
 
     private boolean checkPermissions(String[] permissions) {

@@ -69,8 +69,11 @@ public class ContactsActivity extends BaseActivity<MVP.IContactsView, MVP.IConta
                 viewPager.setCurrentItem(tab.getPosition());
             }
 
-            @Override public void onTabUnselected(TabLayout.Tab tab) {}
-            @Override public void onTabReselected(TabLayout.Tab tab) {}
+            @Override public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override public void onTabReselected(TabLayout.Tab tab) {
+            }
         });
     }
 
@@ -86,16 +89,12 @@ public class ContactsActivity extends BaseActivity<MVP.IContactsView, MVP.IConta
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
 
-            case R.id.menu_get_contacts :
-                if(getPresenter().hasPermissions()) {
-                    getPresenter().getAuthConsent();
-                } else {
-                    getPresenter().requestPermissions(this, PERMISSION_REQUEST_CODE);
-                }
+            case R.id.menu_get_contacts:
+                getAuthConsent();
                 return true;
-            case R.id.menu_remove_access :
+            case R.id.menu_remove_access:
                 getPresenter().revokeAccess();
                 return true;
             default:
@@ -106,16 +105,15 @@ public class ContactsActivity extends BaseActivity<MVP.IContactsView, MVP.IConta
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         boolean hasPermissions = true;
-
-        if(requestCode == PERMISSION_REQUEST_CODE){
-            for(int result: grantResults){
-                if(result != PackageManager.PERMISSION_GRANTED){
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
                     hasPermissions = false;
+                    break;
                 }
             }
-            if(hasPermissions) getPresenter().getAuthConsent();
+            if (hasPermissions) getAuthConsent();
         }
-
     }
 
     @Override protected void onStart() {
@@ -126,7 +124,7 @@ public class ContactsActivity extends BaseActivity<MVP.IContactsView, MVP.IConta
     @Override protected void onResume() {
         super.onResume();
 
-        if(getIntent() != null && getIntent().getData() != null){
+        if (getIntent() != null && getIntent().getData() != null) {
             Log.i(getClass().getSimpleName(), "returned with redirect uri : " + getIntent().getData().toString());
             getPresenter().getAccessToken(getIntent().getData().toString());
         }
@@ -150,16 +148,21 @@ public class ContactsActivity extends BaseActivity<MVP.IContactsView, MVP.IConta
     }
 
 
-
-    @Override public void getAuthConsent() {
-        getPresenter().getAuthConsent();
+    @Override public Observable<List<Contact>> getContactsApiSubject() {
+        return getPresenter().getContactsSubject();
     }
 
-    @Override public Observable<List<Contact>> getContactsApiObservable() {
-        return null;
+    @Override public Observable<List<Contact>> getPeopleApiSubject() {
+        return getPresenter().getPeopleSubject();
     }
 
-    @Override public Observable<List<Contact>> getPeopleApiObservable() {
-        return null;
+    private void getAuthConsent() {
+        if (getPresenter().hasPermissions()) {
+            if (!getPresenter().hasAccessOrRefreshToken()) {
+                getPresenter().getAuthConsent();
+            }
+        } else {
+            getPresenter().requestPermissions(this, PERMISSION_REQUEST_CODE);
+        }
     }
 }

@@ -10,11 +10,11 @@ import okhttp3.OkHttpClient;
 
 @Module public class ApiServiceModule {
 
-    @Provides @ServiceScope PeopleApiClient providePeopleApiRequest(OkHttpClient client){
+    @Provides @ServiceScope PeopleApiClient providePeopleApiRequest(OkHttpClient client) {
         return new PeopleApiClient(client);
     }
 
-    @Provides @ServiceScope ContactsApiClient provideContactApiRequest(OkHttpClient client){
+    @Provides @ServiceScope ContactsApiClient provideContactApiRequest(OkHttpClient client) {
         return new ContactsApiClient(client);
     }
 }

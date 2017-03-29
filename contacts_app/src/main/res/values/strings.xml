@@ -2,4 +2,6 @@
     <string name="app_name">GoogleContactSyncApp</string>
     <string name="get_contacts">Get Contacts</string>
     <string name="revoke_consent">Revoke Consent</string>
+    <string name="contacts_from_api">Contacts from Api</string>
+    <string name="people_from_api">People from Api</string>
 </resources>

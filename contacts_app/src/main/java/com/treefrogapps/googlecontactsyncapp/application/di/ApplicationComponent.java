@@ -12,5 +12,6 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     ContactsActivityComponent addContactsComponent(ContactsActivityModule contactsActivityModule);
+
     ApiServiceComponent addContactsLoginService(ApiServiceModule serviceModule);
 }

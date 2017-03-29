@@ -1,6 +1,5 @@
 package com.treefrogapps.googlecontactsyncapp.contacts_activity;
 
-
 import android.app.Activity;
 
 import com.treefrogapps.googlecontactsyncapp.common.base_interfaces.IContext;
@@ -16,33 +15,50 @@ import io.reactivex.Observable;
 public interface MVP {
 
     interface IContactsView extends IContext {
-
-        void getAuthConsent();
     }
 
-    interface IContactsViewPresenter extends IPresenterLifeCycle<IContactsView>{
+    interface IContactsViewPresenter extends IPresenterLifeCycle<IContactsView> {
 
         void setUpDisplay(ContactsActivity activity);
+
         void getAuthConsent();
+
         void getAccessToken(String redirectUri);
+
+        boolean hasAccessOrRefreshToken();
+
         boolean hasPermissions();
+
         void requestPermissions(Activity activity, int requestCode);
-        Observable<List<Contact>> getContactsObservable();
-        Observable<List<Contact>> getPeopleObservable();
+
+        Observable<List<Contact>> getContactsSubject();
+
+        Observable<List<Contact>> getPeopleSubject();
+
         void revokeAccess();
+
+        void makeApiCall();
     }
 
-    interface IContactsPresenter extends  IContext {
+    interface IContactsPresenter extends IContext {
 
-        void results(String results);
+        void authSuccessful(boolean successful);
     }
 
     interface IContactsModel extends IModelLifeCycle<IContactsPresenter> {
 
         void getAuth();
+
         void requestAccessToken(String redirectUri);
+
         Observable<List<Contact>> getContactsObservable();
-        Observable<List<Contact>> getPeopleObservable();
+
+        Observable<List<Contact>> getPeopleSubjectObservable();
+
+        void makeApiCall();
+
+        boolean hasAccessAndRefreshToken();
+
         void revokeAccess();
     }
 }

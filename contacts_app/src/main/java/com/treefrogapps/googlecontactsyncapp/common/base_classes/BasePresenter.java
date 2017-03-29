@@ -6,16 +6,16 @@ public abstract class BasePresenter<IPresenter, IModel, Model extends IModelLife
 
     private Model model;
 
-    public void initialise(Model model, IPresenter presenter, boolean savedInstance){
+    public void initialise(Model model, IPresenter presenter, boolean savedInstance) {
         this.model = model;
-        if(!savedInstance){
+        if (!savedInstance) {
             model.onCreate(presenter);
         } else {
             model.onConfigChange(presenter);
         }
     }
 
-    @SuppressWarnings("unchecked") public IModel getModel(){
-        return (IModel)  model;
+    @SuppressWarnings("unchecked") public IModel getModel() {
+        return (IModel) model;
     }
 }

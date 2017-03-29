@@ -26,18 +26,18 @@ public class ApplicationModule {
         this.application = application;
     }
 
-    @Provides @ApplicationScope ContentResolver provideContentProvider(){
+    @Provides @ApplicationScope ContentResolver provideContentProvider() {
         return application.getContentResolver();
     }
 
-    @Provides @ApplicationScope OkHttpClient provideOkHttpClient(){
+    @Provides @ApplicationScope OkHttpClient provideOkHttpClient() {
         return new OkHttpClient.Builder()
                 .cache(new Cache(application.getCacheDir(), 10 * 1024 * 1024))
                 .connectTimeout(20000L, TimeUnit.MILLISECONDS)
                 .build();
     }
 
-    @Provides @ApplicationScope SharedPreferences provideSharedPreferecnes(){
+    @Provides @ApplicationScope SharedPreferences provideSharedPreferences() {
         return application.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
     }
 }
