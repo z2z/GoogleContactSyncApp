@@ -11,6 +11,7 @@ import java.util.List;
 public class PeopleDataModel {
 
     @JsonProperty("connections")
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private List<Connection> connectionList = Collections.emptyList();
 
     public List<Connection> getConnectionList() {
@@ -71,24 +72,6 @@ public class PeopleDataModel {
             this.photos = photos;
         }
 
-        @Override public String toString() {
-            String nameString = "\n";
-            String numbers = "\n";
-            for (Names names : namesList) {
-                nameString += names.toString() + '\n';
-            }
-
-            for (PhoneNumbers phoneNumber : phoneNumbers) {
-                numbers += phoneNumber.toString() + '\n';
-            }
-            return "Connection{" +
-                    "resourceName='" + resourceName + '\'' +
-                    ", eTag='" + eTag + '\'' +
-                    ", phoneNumbers=" + numbers +
-                    ", namesList=" + nameString +
-                    ", photos=" + photos.toString() +
-                    '}';
-        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -122,13 +105,6 @@ public class PeopleDataModel {
             this.value = value;
         }
 
-        @Override public String toString() {
-            return "PhoneNumbers{" +
-                    "phoneNumber='" + phoneNumber + '\'' +
-                    ", formattedType='" + formattedType + '\'' +
-                    ", value='" + value + '\'' +
-                    '}';
-        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -170,15 +146,6 @@ public class PeopleDataModel {
         public void setDisplayNameLastFirst(String displayNameLastFirst) {
             this.displayNameLastFirst = displayNameLastFirst;
         }
-
-        @Override public String toString() {
-            return "Names{" +
-                    "givenName='" + givenName + '\'' +
-                    ", familyName='" + familyName + '\'' +
-                    ", displayName='" + displayName + '\'' +
-                    ", displayNameLastFirst='" + displayNameLastFirst + '\'' +
-                    '}';
-        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -202,13 +169,6 @@ public class PeopleDataModel {
         public void setMetaData(MetaData metaData) {
             this.metaData = metaData;
         }
-
-        @Override public String toString() {
-            return "Photos{" +
-                    "imageUrl='" + imageUrl + '\'' +
-                    ", metaData=" + metaData.toString() +
-                    '}';
-        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -231,13 +191,6 @@ public class PeopleDataModel {
 
         public void setPrimary(boolean primary) {
             this.primary = primary;
-        }
-
-        @Override public String toString() {
-            return "MetaData{" +
-                    "source=" + source.toString() +
-                    ", primary=" + primary +
-                    '}';
         }
     }
 
@@ -263,12 +216,6 @@ public class PeopleDataModel {
             this.id = id;
         }
 
-        @Override public String toString() {
-            return "Source{" +
-                    "type='" + type + '\'' +
-                    ", id='" + id + '\'' +
-                    '}';
-        }
     }
 
     @Override public String toString() {

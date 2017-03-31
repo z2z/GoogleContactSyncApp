@@ -27,6 +27,7 @@
                 android:layout_marginEnd="8dp"/>
 
         </LinearLayout>
+
         <TextView
             android:id="@+id/row_detail_1"
             android:layout_width="0dp"
@@ -56,10 +57,10 @@
 
     </LinearLayout>
 
-    <view
+    <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginLeft="@dimen/normal_margin"
         android:background="#666666"/>
 
-    </LinearLayout>
+</LinearLayout>

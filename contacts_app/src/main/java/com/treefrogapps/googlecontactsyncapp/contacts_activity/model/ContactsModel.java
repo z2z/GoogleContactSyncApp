@@ -15,24 +15,18 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.treefrogapps.googlecontactsyncapp.common.LoginAccessIntent;
-import com.treefrogapps.googlecontactsyncapp.common.LoginRevokedIntent;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.MVP;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.view.Contact;
 import com.treefrogapps.googlecontactsyncapp.contacts_service.AuthService;
 import com.treefrogapps.googlecontactsyncapp.contacts_service.data_model.ContactDataModel;
-import com.treefrogapps.googlecontactsyncapp.contacts_service.data_model.ModelConverter;
 import com.treefrogapps.googlecontactsyncapp.contacts_service.data_model.PeopleDataModel;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 import okhttp3.Call;
@@ -46,8 +40,8 @@ import static com.treefrogapps.googlecontactsyncapp.common.LoginAccessIntent.ACC
 import static com.treefrogapps.googlecontactsyncapp.common.LoginAccessIntent.ACCESS_TOKEN_TIMEOUT;
 import static com.treefrogapps.googlecontactsyncapp.common.LoginAccessIntent.ACTION_LOGIN_SUCCESSFUL;
 import static com.treefrogapps.googlecontactsyncapp.common.LoginAccessIntent.REFRESH_TOKEN_EXTRA;
-import static com.treefrogapps.googlecontactsyncapp.common.LoginRevokedIntent.*;
 import static com.treefrogapps.googlecontactsyncapp.common.LoginRevokedIntent.LOGIN_REVOKED;
+import static com.treefrogapps.googlecontactsyncapp.common.LoginRevokedIntent.matchesAction;
 import static com.treefrogapps.googlecontactsyncapp.common.RxUtils.RxBroadcastReceiver;
 import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.CLIENT_API_ID;
 import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.OAUTH_URL;
@@ -55,16 +49,16 @@ import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.R
 import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.SCOPE;
 import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.generateAuthorisationUrl;
 import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.isTokenValid;
-import static com.treefrogapps.googlecontactsyncapp.contacts_service.data_model.ModelConverter.*;
+import static com.treefrogapps.googlecontactsyncapp.contacts_service.data_model.ModelConverter.convertContactDataModel;
+import static com.treefrogapps.googlecontactsyncapp.contacts_service.data_model.ModelConverter.convertPeopleDataModel;
 
 public class ContactsModel implements MVP.IContactsModel {
 
-    // https://people.googleapis.com/v1/people/me/connections?requestMask.includeField=person.names,person.addresses,person.email_addresses,person.organizations,person.phone_numbers,person.photos - get request  : people request (add access token as header?)
-    // https://www.google.com/m8/feeds/contacts/default/full/ - get request  : contacts request (add access token as header?)
-
     private static final String PEOPLE_URL = "https://people.googleapis.com/v1/people/me/connections?requestMask.includeField=" +
             "person.names,person.addresses,person.email_addresses,person.organizations,person.phone_numbers,person.photos";
-    private static final String CONTACTS_URL = "https://www.google.com/m8/feeds/contacts/default/full";
+    // TODO - JSon data model
+    // private static final String CONTACTS_URL = "https://www.google.com/m8/feeds/contacts/default/full?alt=json&max-results=9999";
+    private static final String CONTACTS_URL = "https://www.google.com/m8/feeds/contacts/default/full/?max-results=100";
     private static final String TAG = ContactsModel.class.getSimpleName();
 
     private WeakReference<MVP.IContactsPresenter> presenterRef;
@@ -97,6 +91,12 @@ public class ContactsModel implements MVP.IContactsModel {
         disposable = new CompositeDisposable();
         peopleSubject = BehaviorSubject.create();
         contactsSubject = BehaviorSubject.create();
+
+        disposable.add(RxBroadcastReceiver(presenterRef.get().getAppContext(),
+                new IntentFilter(ACTION_LOGIN_SUCCESSFUL), true).subscribe(this::serviceCallback));
+
+        disposable.add(RxBroadcastReceiver(presenterRef.get().getAppContext(),
+                new IntentFilter(LOGIN_REVOKED), true).subscribe(this::loginRevoked));
     }
 
     @Override public void onConfigChange(MVP.IContactsPresenter contactsPresenter) {
@@ -108,11 +108,6 @@ public class ContactsModel implements MVP.IContactsModel {
                 .bindService(new Intent(presenterRef.get().getActivityContext(), AuthService.class),
                         loginServiceConnection, BIND_AUTO_CREATE);
 
-        disposable.add(RxBroadcastReceiver(presenterRef.get().getAppContext(),
-                new IntentFilter(ACTION_LOGIN_SUCCESSFUL), true).subscribe(this::serviceCallback));
-
-        disposable.add(RxBroadcastReceiver(presenterRef.get().getAppContext(),
-                new IntentFilter(LOGIN_REVOKED), true).subscribe(this::loginRevoked));
     }
 
     @Override public void onResume() {
@@ -125,10 +120,10 @@ public class ContactsModel implements MVP.IContactsModel {
 
     @Override public void onStop() {
         presenterRef.get().getActivityContext().unbindService(loginServiceConnection);
-        disposable.dispose();
     }
 
     @Override public void onDestroy() {
+        disposable.dispose();
         peopleSubject = null;
         contactsSubject = null;
     }
@@ -152,8 +147,7 @@ public class ContactsModel implements MVP.IContactsModel {
         } else if (preferences.getString(REFRESH_TOKEN_EXTRA, null) != null) {
             authService.requestAccessTokenFromRefreshToken(preferences.getString(ACCESS_TOKEN_EXTRA, null));
         } else {
-            Log.w(TAG, "No auth token, or refresh token available : requesting auth..");
-            getAuth();
+            Log.w(TAG, "No auth token, or refresh token available..");
         }
     }
 
@@ -165,10 +159,10 @@ public class ContactsModel implements MVP.IContactsModel {
         return peopleSubject.observeOn(Schedulers.io()).flatMap(peopleDataModel -> Observable.just(convertPeopleDataModel(peopleDataModel)));
     }
 
-
     @Override public boolean hasAccessAndRefreshToken() {
         return preferences.getString(ACCESS_TOKEN_EXTRA, null) != null &&
-                preferences.getString(REFRESH_TOKEN_EXTRA, null) != null;
+                preferences.getString(REFRESH_TOKEN_EXTRA, null) != null
+                && isTokenValid(preferences.getLong(ACCESS_TOKEN_TIMEOUT, -1), clock);
     }
 
     @Override public void revokeAccess() {
@@ -193,9 +187,12 @@ public class ContactsModel implements MVP.IContactsModel {
         }
     };
 
-
     private void makeContactsApiCall(String accessToken) {
-        Request request = new Request.Builder().url(CONTACTS_URL + "?access_token=" + accessToken).build();
+        Request request = new Request.Builder()
+                .url(CONTACTS_URL)
+                .addHeader("Gdata-version", "3.0")
+                .addHeader("Authorization", "Bearer " + accessToken)
+                .build();
         client.newCall(request).enqueue(new Callback() {
             @Override public void onFailure(Call call, IOException e) {
                 Log.e(TAG, "Error from Contacts Api Call : " + e.toString());
@@ -203,7 +200,9 @@ public class ContactsModel implements MVP.IContactsModel {
 
             @Override public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    ContactDataModel contactDataModel = xmlMapper.readValue(response.body().toString(), ContactDataModel.class);
+                    String responseBody = response.body().string();
+                    Log.e(TAG, responseBody);
+                    ContactDataModel contactDataModel = xmlMapper.readValue(responseBody, ContactDataModel.class);
                     contactsSubject.onNext(contactDataModel);
                 } else {
                     Log.w(TAG, "Contacts Response Failed - Code : " + response.code());
@@ -213,7 +212,10 @@ public class ContactsModel implements MVP.IContactsModel {
     }
 
     private void makePeopleApiCall(String accessToken) {
-        Request request = new Request.Builder().url(PEOPLE_URL + "&access_token=" + accessToken).build();
+        Request request = new Request.Builder()
+                .url(PEOPLE_URL)
+                .addHeader("Authorization", "Bearer " + accessToken)
+                .build();
         client.newCall(request).enqueue(new Callback() {
             @Override public void onFailure(Call call, IOException e) {
                 Log.e(TAG, "Error from People Api Call : " + e.toString());
@@ -221,7 +223,7 @@ public class ContactsModel implements MVP.IContactsModel {
 
             @Override public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    PeopleDataModel peopleDataModel = jsonMapper.readValue(response.body().toString(), PeopleDataModel.class);
+                    PeopleDataModel peopleDataModel = jsonMapper.readValue(response.body().string(), PeopleDataModel.class);
                     peopleSubject.onNext(peopleDataModel);
                 } else {
                     Log.w(TAG, "People Response Failed - Code : " + response.code());
@@ -232,7 +234,7 @@ public class ContactsModel implements MVP.IContactsModel {
 
     private void serviceCallback(Intent intent) {
         Log.i(TAG, "Service Callback");
-        if(LoginAccessIntent.matchesAction(intent)) {
+        if (LoginAccessIntent.matchesAction(intent)) {
             String accessToken = intent.getStringExtra(ACCESS_TOKEN_EXTRA);
             String refreshToken = intent.getStringExtra(REFRESH_TOKEN_EXTRA);
             int timeout = intent.getIntExtra(ACCESS_TOKEN_TIMEOUT, -1);
@@ -249,7 +251,7 @@ public class ContactsModel implements MVP.IContactsModel {
 
     private void loginRevoked(Intent intent) {
         Log.i(TAG, "Service Callback");
-        if(matchesAction(intent)) {
+        if (matchesAction(intent)) {
             Toast.makeText(presenterRef.get().getActivityContext(), "Access to Api Revoked", Toast.LENGTH_SHORT).show();
         }
     }

@@ -8,8 +8,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
-import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.*;
-import static junit.framework.Assert.*;
+import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.getAccessToken;
+import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.getAccessTokenTimeout;
+import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.getRefreshToken;
+import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.isTokenValid;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
 
 public class ApiUtilsTests {
 
@@ -20,7 +25,7 @@ public class ApiUtilsTests {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
         String line;
         StringBuilder builder = new StringBuilder();
-        while ((line = reader.readLine()) != null){
+        while ((line = reader.readLine()) != null) {
             builder.append(line).append('\n');
         }
 
@@ -42,13 +47,13 @@ public class ApiUtilsTests {
 
         String refreshToken = "1/3sUhqn6Z0-5Om3AhfhbvycnkSbDgVHbqrsWGZERsYheT44fggfeddUYwgq9hg564LVOKt7k0NEjHz3Sx";
 
-        String extractedRefreshToken =  getRefreshToken(jsonResponse);
+        String extractedRefreshToken = getRefreshToken(jsonResponse);
 
         assertNotNull(extractedRefreshToken);
         assertEquals(refreshToken, extractedRefreshToken);
     }
 
-    @Test public void givenAccessPermissionGranted_ExtractAccessTokenExpiryTimeoutCorrectly() throws Exception{
+    @Test public void givenAccessPermissionGranted_ExtractAccessTokenExpiryTimeoutCorrectly() throws Exception {
 
         int timeoutInSeconds = 3600;
 
@@ -59,7 +64,7 @@ public class ApiUtilsTests {
 
     @Test public void givenAccessTokenTimeoutHasExpired_ConfirmMethodCheckReturnsFalse() throws Exception {
 
-        long expiredTimeout = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + 120;
+        long expiredTimeout = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) - 120;
 
         assertFalse(isTokenValid(expiredTimeout, () -> TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())));
     }

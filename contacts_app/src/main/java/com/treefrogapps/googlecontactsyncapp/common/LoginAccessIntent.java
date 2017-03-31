@@ -18,7 +18,7 @@ public class LoginAccessIntent extends Intent {
         putExtra(REFRESH_TOKEN_EXTRA, refreshToken);
     }
 
-    public static boolean matchesAction(Intent intent){
+    public static boolean matchesAction(Intent intent) {
         return intent.getAction().equals(ACTION_LOGIN_SUCCESSFUL);
     }
 }

@@ -7,7 +7,7 @@ public class LoginRevokedIntent extends Intent {
 
     public static final String LOGIN_REVOKED = "com.treefrogapps.googlecontactsyncapp.login_revokedl";
 
-    public LoginRevokedIntent(String accessToken, String refreshToken, int accessTokenTimeout) {
+    public LoginRevokedIntent() {
         super(LOGIN_REVOKED);
     }
 

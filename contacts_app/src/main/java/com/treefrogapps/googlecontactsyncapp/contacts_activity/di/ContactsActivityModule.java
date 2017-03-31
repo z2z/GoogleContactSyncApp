@@ -12,9 +12,9 @@ import com.fasterxml.jackson.dataformat.xml.XmlFactory;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.treefrogapps.googlecontactsyncapp.common.di_scopes.ActivityScope;
 import com.treefrogapps.googlecontactsyncapp.common.di_scopes.ApplicationScope;
+import com.treefrogapps.googlecontactsyncapp.contacts_activity.model.Clock;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.model.ContactsModel;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.presenter.ContactsPresenter;
-import com.treefrogapps.googlecontactsyncapp.contacts_activity.model.Clock;
 
 import java.util.concurrent.TimeUnit;
 
@@ -48,7 +48,9 @@ import okhttp3.OkHttpClient;
         }
 
         @Provides @ApplicationScope ObjectMapper provideJSONMapper() {
-            return new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            return mapper;
         }
 
         @Provides @ApplicationScope ContactsModel provideModel(ContentResolver resolver, SharedPreferences preferences, OkHttpClient client,

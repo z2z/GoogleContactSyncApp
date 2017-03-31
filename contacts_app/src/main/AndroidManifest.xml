@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".contacts_activity.view.ContactsActivity"
+        <activity
+            android:name=".contacts_activity.view.ContactsActivity"
             android:windowSoftInputMode="adjustNothing"
             android:launchMode="singleTask">
             <intent-filter>
@@ -23,9 +24,10 @@
             </intent-filter>
             <intent-filter>
                 <data android:scheme="com.treefrogapps.googlecontactsyncapp"/>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 

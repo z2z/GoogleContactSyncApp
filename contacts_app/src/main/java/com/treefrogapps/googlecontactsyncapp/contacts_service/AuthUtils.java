@@ -83,6 +83,6 @@ public final class AuthUtils {
     }
 
     public static boolean isTokenValid(long tokenTimeOut, Clock clock) {
-        return tokenTimeOut != -1 && tokenTimeOut < clock.currentTimeInSeconds();
+        return tokenTimeOut != -1 && tokenTimeOut > clock.currentTimeInSeconds();
     }
 }

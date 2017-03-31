@@ -9,6 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.treefrogapps.googlecontactsyncapp.common.LoginAccessIntent;
+import com.treefrogapps.googlecontactsyncapp.common.LoginRevokedIntent;
 import com.treefrogapps.googlecontactsyncapp.contacts_service.clients.ContactsApiClient;
 import com.treefrogapps.googlecontactsyncapp.contacts_service.clients.PeopleApiClient;
 import com.treefrogapps.googlecontactsyncapp.contacts_service.di.ApiServiceModule;
@@ -104,12 +105,13 @@ public class AuthService extends Service {
             }
 
             @Override public void onResponse(Call call, Response response) throws IOException {
-
+                Log.i(TAG, "Response Code : " + response.code());
+                if (response.isSuccessful()) {
+                    LocalBroadcastManager.getInstance(AuthService.this).sendBroadcast(new LoginRevokedIntent());
+                }
             }
         });
-
     }
-
 
     private void makeAuthRequest(OkHttpClient client, Request request) {
         client.newCall(request).enqueue(new Callback() {
@@ -122,7 +124,7 @@ public class AuthService extends Service {
 
                 if (response.isSuccessful()) {
                     String responseString = response.body().string();
-                    Log.i(TAG, response.body().string());
+                    Log.i(TAG, responseString);
                     LocalBroadcastManager.getInstance(AuthService.this)
                             .sendBroadcast(new LoginAccessIntent(getAccessToken(responseString),
                                     getRefreshToken(responseString), getAccessTokenTimeout(responseString)));

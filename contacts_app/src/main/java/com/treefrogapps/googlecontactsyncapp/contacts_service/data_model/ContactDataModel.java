@@ -90,12 +90,6 @@ public class ContactDataModel {
             this.email = email;
         }
 
-        @Override public String toString() {
-            return "Author{" +
-                    "name='" + name + '\'' +
-                    ", email='" + email + '\'' +
-                    '}';
-        }
     }
 
     public static class ContactEntry {
@@ -146,14 +140,6 @@ public class ContactDataModel {
             this.phoneNumber = phoneNumber;
         }
 
-        @Override public String toString() {
-            return "ContactEntry{" +
-                    "id='" + id + '\'' +
-                    ", title='" + title + '\'' +
-                    ", nameDetails=" + nameDetails.toString() +
-                    ", phoneNumber='" + phoneNumber.toString() + '\'' +
-                    '}';
-        }
     }
 
     public static class NameDetails {
@@ -189,27 +175,6 @@ public class ContactDataModel {
             this.familyName = familyName;
         }
 
-        @Override public String toString() {
-            return "NameDetails{" +
-                    "fullName='" + fullName + '\'' +
-                    ", givenName='" + givenName + '\'' +
-                    ", familyName='" + familyName + '\'' +
-                    '}';
-        }
-    }
-
-    @Override public String toString() {
-        String contacts = "\n";
-        for (ContactEntry entry : contactEntryList) {
-            contacts += entry.toString() + '\n';
-        }
-        return "ContactDataModel{" +
-                "id='" + id + '\'' +
-                ", updated='" + updated + '\'' +
-                ", title='" + title + '\'' +
-                ", author=" + author.toString() +
-                ", contactEntries=" + contacts +
-                '}';
     }
 
     public static class PhoneNumber {
@@ -222,12 +187,6 @@ public class ContactDataModel {
 
         public void setNumber(String number) {
             this.number = number;
-        }
-
-        @Override public String toString() {
-            return "PhoneNumber{" +
-                    "number='" + number + '\'' +
-                    '}';
         }
     }
 }

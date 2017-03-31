@@ -55,6 +55,8 @@ public class ContactsActivity extends BaseActivity<MVP.IContactsView, MVP.IConta
         contactsPagerAdapter = new ContactsPagerAdapter(getSupportFragmentManager(), tabs);
 
         setUpDisplay();
+
+        getPresenter().makeApiCall();
     }
 
     private void setUpDisplay() {

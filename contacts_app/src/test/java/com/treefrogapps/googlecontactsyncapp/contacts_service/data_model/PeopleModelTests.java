@@ -10,7 +10,9 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertSame;
 
 public class PeopleModelTests {
 
@@ -31,7 +33,7 @@ public class PeopleModelTests {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
         String line;
         StringBuilder builder = new StringBuilder();
-        while ((line = bufferedReader.readLine()) != null){
+        while ((line = bufferedReader.readLine()) != null) {
             builder.append(line).append('\n');
         }
 

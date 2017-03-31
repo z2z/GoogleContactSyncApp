@@ -12,7 +12,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(JUnit4.class)
 public class ContactsModelTests {
@@ -32,7 +33,7 @@ public class ContactsModelTests {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
         String line;
         StringBuilder builder = new StringBuilder();
-        while((line = reader.readLine()) != null){
+        while ((line = reader.readLine()) != null) {
             builder.append(line).append("\n");
         }
 
@@ -56,8 +57,6 @@ public class ContactsModelTests {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         ContactDataModel contactDataModel = mapper.readValue(xmlResponse, ContactDataModel.class);
-
-        System.out.println(contactDataModel.toString());
 
         assertNotNull(contactDataModel);
 
