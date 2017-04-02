@@ -1,0 +1,201 @@
+{
+  "feed": {
+    "category": [{
+      "term": "http://schemas.google.com/contact/2008#contact",
+      "scheme": "http://schemas.google.com/g/2005#kind"
+    }],
+    "updated": {
+      "$t": "2017-04-02T20:50:46.690Z"
+    },
+    "xmlns$gd": "http://schemas.google.com/g/2005",
+    "generator": {
+      "$t": "Contacts",
+      "version": "1.0",
+      "uri": "http://www.google.com/m8/feeds"
+    },
+    "title": {
+      "$t": "Test User Contacts",
+      "type": "text"
+    },
+    "author": [{
+      "name": {
+        "$t": "Test User"
+      },
+      "email": {
+        "$t": "test.user@gmail.com"
+      }
+    }],
+    "xmlns$gContact": "http://schemas.google.com/contact/2008",
+    "openSearch$startIndex": {
+      "$t": "1"
+    },
+    "xmlns$batch": "http://schemas.google.com/gdata/batch",
+    "xmlns": "http://www.w3.org/2005/Atom",
+    "link": [{
+      "href": "https://www.google.com/",
+      "type": "text/html",
+      "rel": "alternate"
+    }, {
+      "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full",
+      "type": "application/atom+xml",
+      "rel": "http://schemas.google.com/g/2005#feed"
+    }, {
+      "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full",
+      "type": "application/atom+xml",
+      "rel": "http://schemas.google.com/g/2005#post"
+    }, {
+      "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/batch",
+      "type": "application/atom+xml",
+      "rel": "http://schemas.google.com/g/2005#batch"
+    }, {
+      "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full?max-results=9999&alt=json",
+      "type": "application/atom+xml",
+      "rel": "self"
+    }],
+    "xmlns$openSearch": "http://a9.com/-/spec/opensearchrss/1.0/",
+    "openSearch$itemsPerPage": {
+      "$t": "9999"
+    },
+    "entry": [{
+      "category": [{
+        "term": "http://schemas.google.com/contact/2008#contact",
+        "scheme": "http://schemas.google.com/g/2005#kind"
+      }],
+      "updated": {
+        "$t": "2013-10-07T10:27:31.509Z"
+      },
+      "title": {
+        "$t": "Friend one",
+        "type": "text"
+      },
+      "gd$phoneNumber": [{
+        "$t": "+441111111111",
+        "uri": "tel:+44-1111-111111",
+        "rel": "http://schemas.google.com/g/2005#mobile"
+      }],
+      "link": [{
+        "href": "https://www.google.com/m8/feeds/photos/media/test.user%40gmail.com/b9e75c8f9c3c28/1B2M2Y8AsgTpgAmY7PhCfg",
+        "type": "image/*",
+        "rel": "http://schemas.google.com/contacts/2008/rel#edit-photo"
+      }, {
+        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/b9e75c8f9c3c28",
+        "type": "application/atom+xml",
+        "rel": "self"
+      }, {
+        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/b9e75c8f9c3c28/1381141651509001",
+        "type": "application/atom+xml",
+        "rel": "edit"
+      }],
+      "id": {
+        "$t": "http://www.google.com/m8/feeds/contacts/test.user%40gmail.com/base/b9e75c8f9c3c28"
+      }
+    }, {
+      "category": [{
+        "term": "http://schemas.google.com/contact/2008#contact",
+        "scheme": "http://schemas.google.com/g/2005#kind"
+      }],
+      "updated": {
+        "$t": "2016-08-11T17:29:08.406Z"
+      },
+      "title": {
+        "$t": "WeQ4U",
+        "type": "text"
+      },
+      "gd$phoneNumber": [{
+        "$t": "03301240239",
+        "uri": "tel:+44-330-124-0239",
+        "rel": "http://schemas.google.com/g/2005#other"
+      }],
+      "link": [{
+        "href": "https://www.google.com/m8/feeds/photos/media/test.user%40gmail.com/2266ca40a632ffb/1B2M2Y8AsgTpgAmY7PhCfg",
+        "type": "image/*",
+        "rel": "http://schemas.google.com/contacts/2008/rel#edit-photo"
+      }, {
+        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/2266ca40a632ffb",
+        "type": "application/atom+xml",
+        "rel": "self"
+      }, {
+        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/2266ca40a632ffb/1470936548406002",
+        "type": "application/atom+xml",
+        "rel": "edit"
+      }],
+      "id": {
+        "$t": "http://www.google.com/m8/feeds/contacts/test.user%40gmail.com/base/2266ca40a632ffb"
+      }
+    }, {
+      "category": [{
+        "term": "http://schemas.google.com/contact/2008#contact",
+        "scheme": "http://schemas.google.com/g/2005#kind"
+      }],
+      "updated": {
+        "$t": "2017-01-07T15:40:34.861Z"
+      },
+      "title": {
+        "$t": "Friend Two",
+        "type": "text"
+      },
+      "link": [{
+        "href": "https://www.google.com/m8/feeds/photos/media/test.user%40gmail.com/23d86d98897a316/1B2M2Y8AsgTpgAmY7PhCfg",
+        "type": "image/*",
+        "rel": "http://schemas.google.com/contacts/2008/rel#edit-photo"
+      }, {
+        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/23d86d98897a316",
+        "type": "application/atom+xml",
+        "rel": "self"
+      }, {
+        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/23d86d98897a316/1483803634861001",
+        "type": "application/atom+xml",
+        "rel": "edit"
+      }],
+      "gd$email": [{
+        "primary": "true",
+        "rel": "http://schemas.google.com/g/2005#other",
+        "address": "friend.two@gmail.com"
+      }],
+      "id": {
+        "$t": "http://www.google.com/m8/feeds/contacts/test.user%40gmail.com/base/23d86d98897a316"
+      }
+    }, {
+      "category": [{
+        "term": "http://schemas.google.com/contact/2008#contact",
+        "scheme": "http://schemas.google.com/g/2005#kind"
+      }],
+      "updated": {
+        "$t": "2013-10-28T21:53:46.628Z"
+      },
+      "title": {
+        "$t": "Friend Three",
+        "type": "text"
+      },
+      "gd$phoneNumber": [{
+        "$t": "+441111111112",
+        "uri": "tel:+44-1111-111112",
+        "rel": "http://schemas.google.com/g/2005#mobile"
+      }],
+      "link": [{
+        "href": "https://www.google.com/m8/feeds/photos/media/test.user%40gmail.com/25f17250f3cd787/1B2M2Y8AsgTpgAmY7PhCfg",
+        "type": "image/*",
+        "rel": "http://schemas.google.com/contacts/2008/rel#edit-photo"
+      }, {
+        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/25f17250f3cd787",
+        "type": "application/atom+xml",
+        "rel": "self"
+      }, {
+        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/25f17250f3cd787/1382997226628001",
+        "type": "application/atom+xml",
+        "rel": "edit"
+      }],
+      "id": {
+        "$t": "http://www.google.com/m8/feeds/contacts/test.user%40gmail.com/base/25f17250f3cd787"
+      }
+    }],
+    "openSearch$totalResults": {
+      "$t": "106"
+    },
+    "id": {
+      "$t": "test.user@gmail.com"
+    }
+  },
+  "version": "1.0",
+  "encoding": "UTF-8"
+}

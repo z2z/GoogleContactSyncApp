@@ -13,13 +13,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.treefrogapps.googlecontactsyncapp.common.LoginAccessIntent;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.MVP;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.view.Contact;
 import com.treefrogapps.googlecontactsyncapp.contacts_service.AuthService;
-import com.treefrogapps.googlecontactsyncapp.contacts_service.data_model.ContactDataModel;
-import com.treefrogapps.googlecontactsyncapp.contacts_service.data_model.PeopleDataModel;
+import com.treefrogapps.googlecontactsyncapp.contacts_activity.model.data_model.ContactDataModel;
+import com.treefrogapps.googlecontactsyncapp.contacts_activity.model.data_model.PeopleDataModel;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -49,23 +48,21 @@ import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.R
 import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.SCOPE;
 import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.generateAuthorisationUrl;
 import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.isTokenValid;
-import static com.treefrogapps.googlecontactsyncapp.contacts_service.data_model.ModelConverter.convertContactDataModel;
-import static com.treefrogapps.googlecontactsyncapp.contacts_service.data_model.ModelConverter.convertPeopleDataModel;
+import static com.treefrogapps.googlecontactsyncapp.contacts_activity.model.data_model.ModelConverter.convertContactDataModel;
+import static com.treefrogapps.googlecontactsyncapp.contacts_activity.model.data_model.ModelConverter.convertPeopleDataModel;
 
 public class ContactsModel implements MVP.IContactsModel {
 
     private static final String PEOPLE_URL = "https://people.googleapis.com/v1/people/me/connections?requestMask.includeField=" +
             "person.names,person.addresses,person.email_addresses,person.organizations,person.phone_numbers,person.photos";
-    // TODO - JSon data model
-    // private static final String CONTACTS_URL = "https://www.google.com/m8/feeds/contacts/default/full?alt=json&max-results=9999";
-    private static final String CONTACTS_URL = "https://www.google.com/m8/feeds/contacts/default/full/?max-results=100";
+
+    private static final String CONTACTS_URL = "https://www.google.com/m8/feeds/contacts/default/full?alt=json&max-results=9999";
     private static final String TAG = ContactsModel.class.getSimpleName();
 
     private WeakReference<MVP.IContactsPresenter> presenterRef;
     private ContentResolver resolver;
     private SharedPreferences preferences;
     private OkHttpClient client;
-    private ObjectMapper xmlMapper;
     private ObjectMapper jsonMapper;
     private Clock clock;
     private AuthService authService;
@@ -75,12 +72,11 @@ public class ContactsModel implements MVP.IContactsModel {
     private BehaviorSubject<PeopleDataModel> peopleSubject;
 
     public ContactsModel(ContentResolver resolver, SharedPreferences preferences,
-                         OkHttpClient client, XmlMapper xmlMapper, ObjectMapper jsonMapper, Clock clock) {
+                         OkHttpClient client, ObjectMapper jsonMapper, Clock clock) {
 
         this.resolver = resolver;
         this.preferences = preferences;
         this.client = client;
-        this.xmlMapper = xmlMapper;
         this.jsonMapper = jsonMapper;
         this.clock = clock;
     }
@@ -190,7 +186,6 @@ public class ContactsModel implements MVP.IContactsModel {
     private void makeContactsApiCall(String accessToken) {
         Request request = new Request.Builder()
                 .url(CONTACTS_URL)
-                .addHeader("Gdata-version", "3.0")
                 .addHeader("Authorization", "Bearer " + accessToken)
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -200,9 +195,7 @@ public class ContactsModel implements MVP.IContactsModel {
 
             @Override public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-                    Log.e(TAG, responseBody);
-                    ContactDataModel contactDataModel = xmlMapper.readValue(responseBody, ContactDataModel.class);
+                    ContactDataModel contactDataModel = jsonMapper.readValue(response.body().string(), ContactDataModel.class);
                     contactsSubject.onNext(contactDataModel);
                 } else {
                     Log.w(TAG, "Contacts Response Failed - Code : " + response.code());

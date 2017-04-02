@@ -4,12 +4,8 @@ import android.content.ContentResolver;
 import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
 
-import com.ctc.wstx.stax.WstxInputFactory;
-import com.ctc.wstx.stax.WstxOutputFactory;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlFactory;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.treefrogapps.googlecontactsyncapp.common.di_scopes.ActivityScope;
 import com.treefrogapps.googlecontactsyncapp.common.di_scopes.ApplicationScope;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.model.Clock;
@@ -40,22 +36,15 @@ import okhttp3.OkHttpClient;
             return () -> TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
         }
 
-        @Provides @ApplicationScope XmlMapper provideXMLMapper() {
-            XmlFactory factory = new XmlFactory(new WstxInputFactory(), new WstxOutputFactory());
-            XmlMapper mapper = new XmlMapper(factory);
-            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            return mapper;
-        }
-
         @Provides @ApplicationScope ObjectMapper provideJSONMapper() {
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             return mapper;
         }
 
-        @Provides @ApplicationScope ContactsModel provideModel(ContentResolver resolver, SharedPreferences preferences, OkHttpClient client,
-                                                               XmlMapper xmlMapper, ObjectMapper jsonMapper, Clock clock) {
-            return new ContactsModel(resolver, preferences, client, xmlMapper, jsonMapper, clock);
+        @Provides @ApplicationScope ContactsModel provideModel(ContentResolver resolver, SharedPreferences preferences,
+                                                               OkHttpClient client, ObjectMapper jsonMapper, Clock clock) {
+            return new ContactsModel(resolver, preferences, client, jsonMapper, clock);
         }
     }
 }

@@ -30,9 +30,6 @@ android {
         exclude 'META-INF/NOTICE'
     }
 
-    dexOptions {
-        additionalParameters = ['--core-library']
-    }
 }
 
 dependencies {
@@ -40,8 +37,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-    compile files('libs/stax-api-1.0-2.jar')
 
     compile project.ext.deps.appcompat
     compile project.ext.deps.constraint_layout
@@ -54,7 +49,6 @@ dependencies {
     compile project.ext.deps.jackson
     compile project.ext.deps.jackson_annotations
     compile project.ext.deps.jackson_databind
-    compile project.ext.deps.jackson_xml
     compile project.ext.deps.butterknife
     compile project.ext.deps.glide
     annotationProcessor project.ext.deps.butterknife_compiler
@@ -64,5 +58,4 @@ dependencies {
     testCompile project.ext.deps.jackson
     testCompile project.ext.deps.jackson_annotations
     testCompile project.ext.deps.jackson_databind
-    testCompile project.ext.deps.jackson_xml
 }

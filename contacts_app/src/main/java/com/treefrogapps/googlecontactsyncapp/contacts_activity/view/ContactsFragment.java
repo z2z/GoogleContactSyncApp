@@ -78,13 +78,9 @@ public class ContactsFragment extends Fragment {
             disposable = fragmentListener.getContactsApiSubject().
                     observeOn(AndroidSchedulers.mainThread()).subscribe(this::updateRecyclerView);
 
-            fragmentTextView.setText(getActivity().getString(R.string.contacts_from_api));
-
         } else if (fragmentPosition == 1) {
             disposable = fragmentListener.getPeopleApiSubject()
                     .observeOn(AndroidSchedulers.mainThread()).subscribe(this::updateRecyclerView);
-
-            fragmentTextView.setText(getActivity().getString(R.string.people_from_api));
         }
     }
 
@@ -108,6 +104,8 @@ public class ContactsFragment extends Fragment {
     }
 
     private void updateRecyclerView(List<Contact> contactList) {
+        fragmentTextView.setText((fragmentPosition == 0 ?  getActivity().getString(R.string.contacts_from_api)
+                : getActivity().getString(R.string.people_from_api)) + " - " + contactList.size() + " Contacts");
         this.contactList.clear();
         this.contactList.addAll(contactList);
         contactRecyclerAdapter.notifyDataSetChanged();
