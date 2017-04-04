@@ -54,11 +54,13 @@ import static com.treefrogapps.googlecontactsyncapp.contacts_activity.model.data
 public class ContactsModel implements MVP.IContactsModel {
 
     private static final String PEOPLE_URL = "https://people.googleapis.com/v1/people/me/connections?requestMask.includeField=" +
-            "person.names,person.addresses,person.email_addresses,person.organizations,person.phone_numbers,person.photos";
+            "person.names,person.addresses,person.email_addresses,person.organizations,person.phone_numbers,person.photos&pageSize=500";
 
-    private static final String CONTACTS_URL = "https://www.google.com/m8/feeds/contacts/default/full?alt=json&max-results=9999";
+    private static final String CONTACTS_URL_FULL = "https://www.google.com/m8/feeds/contacts/default/full?alt=json&max-results=9999";
+    private static final String CONTACTS_URL_MODIFIED = "https://www.google.com/m8/feeds/contacts/default/full?alt=json&updated-min=2017-04-04T12:00:00&max-results=9999";
+    // full url = https://www.google.com/m8/feeds/contacts/default/full?alt=json&max-results=9999&updated-min=2017-04-04T12:00:00&showdeleted=true
+
     private static final String TAG = ContactsModel.class.getSimpleName();
-
     private WeakReference<MVP.IContactsPresenter> presenterRef;
     private ContentResolver resolver;
     private SharedPreferences preferences;
@@ -67,6 +69,8 @@ public class ContactsModel implements MVP.IContactsModel {
     private Clock clock;
     private AuthService authService;
     private boolean boundToService;
+    private SyncType pendingSyncType;
+    private boolean pendingRefreshTokenRequest;
     private CompositeDisposable disposable;
     private BehaviorSubject<ContactDataModel> contactsSubject;
     private BehaviorSubject<PeopleDataModel> peopleSubject;
@@ -134,14 +138,19 @@ public class ContactsModel implements MVP.IContactsModel {
         if (boundToService) authService.requestAccessToken(redirectUri);
     }
 
-    @Override public void makeApiCall() {
+    @Override public void makeApiCall(SyncType syncType) {
         String accessToken = preferences.getString(ACCESS_TOKEN_EXTRA, null);
         long tokenTimeOut = preferences.getLong(ACCESS_TOKEN_TIMEOUT, -1);
         if (accessToken != null && isTokenValid(tokenTimeOut, clock)) {
-            makePeopleApiCall(accessToken);
-            makeContactsApiCall(accessToken);
+            presenterRef.get().queryingApi();
+            makePeopleApiCall(accessToken, syncType);
+            makeContactsApiCall(accessToken, syncType);
         } else if (preferences.getString(REFRESH_TOKEN_EXTRA, null) != null) {
-            authService.requestAccessTokenFromRefreshToken(preferences.getString(ACCESS_TOKEN_EXTRA, null));
+            if(boundToService) {
+                authService.requestAccessTokenFromRefreshToken(preferences.getString(REFRESH_TOKEN_EXTRA, null));
+            } else {
+                pendingSyncType = syncType;
+            }
         } else {
             Log.w(TAG, "No auth token, or refresh token available..");
         }
@@ -176,6 +185,10 @@ public class ContactsModel implements MVP.IContactsModel {
             AuthService.LoginServiceBinder binder = (AuthService.LoginServiceBinder) service;
             authService = binder.getAuthService();
             boundToService = true;
+            if(pendingSyncType != null){
+                makeApiCall(pendingSyncType);
+                pendingSyncType = null;
+            }
         }
 
         @Override public void onServiceDisconnected(ComponentName name) {
@@ -183,9 +196,10 @@ public class ContactsModel implements MVP.IContactsModel {
         }
     };
 
-    private void makeContactsApiCall(String accessToken) {
+    private void makeContactsApiCall(String accessToken, SyncType syncType) {
         Request request = new Request.Builder()
-                .url(CONTACTS_URL)
+                .url(CONTACTS_URL_FULL)
+                .addHeader("GData-Version", "3.0")
                 .addHeader("Authorization", "Bearer " + accessToken)
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -204,7 +218,7 @@ public class ContactsModel implements MVP.IContactsModel {
         });
     }
 
-    private void makePeopleApiCall(String accessToken) {
+    private void makePeopleApiCall(String accessToken, SyncType syncType) {
         Request request = new Request.Builder()
                 .url(PEOPLE_URL)
                 .addHeader("Authorization", "Bearer " + accessToken)
@@ -237,7 +251,7 @@ public class ContactsModel implements MVP.IContactsModel {
                 editor.putString(ACCESS_TOKEN_EXTRA, accessToken);
                 editor.putLong(ACCESS_TOKEN_TIMEOUT, (timeout - 180) + clock.currentTimeInSeconds());
                 editor.apply();
-                makeApiCall();
+                makeApiCall(pendingSyncType !=null ? pendingSyncType : SyncType.FULL);
             }
         }
     }

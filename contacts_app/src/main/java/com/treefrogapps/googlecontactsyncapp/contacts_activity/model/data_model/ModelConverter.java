@@ -54,15 +54,10 @@ public final class ModelConverter {
                 String lastName = "";
                 String phoneNumber = "";
 
-                ContactDataModel.Title title = entry.getTitle();
-                if (title != null && title.getTitle() != null) {
-                    String[] titleArray = title.getTitle().split(" ");
-                    if (titleArray.length == 2) {
-                        firstName = titleArray[0];
-                        lastName = titleArray[1];
-                    } else {
-                        firstName = title.getTitle();
-                    }
+                ContactDataModel.ContactName contactName = entry.getContactName();
+                if (contactName != null) {
+                    firstName = contactName.getFirstName() != null ? contactName.getFirstName().getFirstName() : "";
+                    lastName = contactName.getFamilyName() != null ? contactName.getFamilyName().getFamilyName() : "";
                 }
 
                 List<PhoneNumber> numberList = entry.getPhoneNumberList();

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.treefrogapps.googlecontactsyncapp.R;
@@ -42,6 +43,7 @@ public class ContactsFragment extends Fragment {
 
     @BindView(R.id.contacts_recycler_view) RecyclerView recyclerView;
     @BindView(R.id.fragment_text_view) TextView fragmentTextView;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
 
     interface OnFragmentListener {
         Observable<List<Contact>> getContactsApiSubject();
@@ -104,10 +106,19 @@ public class ContactsFragment extends Fragment {
     }
 
     private void updateRecyclerView(List<Contact> contactList) {
+        hideProgressBar();
         fragmentTextView.setText((fragmentPosition == 0 ?  getActivity().getString(R.string.contacts_from_api)
                 : getActivity().getString(R.string.people_from_api)) + " - " + contactList.size() + " Contacts");
         this.contactList.clear();
         this.contactList.addAll(contactList);
         contactRecyclerAdapter.notifyDataSetChanged();
+    }
+
+    private void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    public void showProgressBar(){
+        progressBar.setVisibility(View.VISIBLE);
     }
 }

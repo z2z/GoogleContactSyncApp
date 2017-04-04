@@ -1,10 +1,12 @@
 package com.treefrogapps.googlecontactsyncapp.contacts_activity;
 
 import android.app.Activity;
+import android.support.v4.view.ViewPager;
 
 import com.treefrogapps.googlecontactsyncapp.common.base_interfaces.IContext;
 import com.treefrogapps.googlecontactsyncapp.common.base_interfaces.IModelLifeCycle;
 import com.treefrogapps.googlecontactsyncapp.common.base_interfaces.IPresenterLifeCycle;
+import com.treefrogapps.googlecontactsyncapp.contacts_activity.model.SyncType;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.view.Contact;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.view.ContactsActivity;
 
@@ -15,6 +17,8 @@ import io.reactivex.Observable;
 public interface MVP {
 
     interface IContactsView extends IContext {
+
+        ViewPager getViewPager();
     }
 
     interface IContactsViewPresenter extends IPresenterLifeCycle<IContactsView> {
@@ -37,12 +41,14 @@ public interface MVP {
 
         void revokeAccess();
 
-        void makeApiCall();
+        void makeApiCall(SyncType syncType);
     }
 
     interface IContactsPresenter extends IContext {
 
         void authSuccessful(boolean successful);
+
+        void queryingApi();
     }
 
     interface IContactsModel extends IModelLifeCycle<IContactsPresenter> {
@@ -55,7 +61,7 @@ public interface MVP {
 
         Observable<List<Contact>> getPeopleSubjectObservable();
 
-        void makeApiCall();
+        void makeApiCall(SyncType syncType);
 
         boolean hasAccessAndRefreshToken();
 

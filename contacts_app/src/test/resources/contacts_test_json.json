@@ -1,11 +1,13 @@
 {
   "feed": {
-    "category": [{
-      "term": "http://schemas.google.com/contact/2008#contact",
-      "scheme": "http://schemas.google.com/g/2005#kind"
-    }],
+    "category": [
+      {
+        "term": "http://schemas.google.com/contact/2008#contact",
+        "scheme": "http://schemas.google.com/g/2005#kind"
+      }
+    ],
     "updated": {
-      "$t": "2017-04-02T20:50:46.690Z"
+      "$t": "2017-04-03T16:50:45.640Z"
     },
     "xmlns$gd": "http://schemas.google.com/g/2005",
     "generator": {
@@ -14,186 +16,382 @@
       "uri": "http://www.google.com/m8/feeds"
     },
     "title": {
-      "$t": "Test User Contacts",
-      "type": "text"
+      "$t": "Sync Test's Contacts"
     },
-    "author": [{
-      "name": {
-        "$t": "Test User"
-      },
-      "email": {
-        "$t": "test.user@gmail.com"
+    "author": [
+      {
+        "name": {
+          "$t": "Sync Test"
+        },
+        "email": {
+          "$t": "synctest1978@gmail.com"
+        }
       }
-    }],
+    ],
+    "openSearch$itemsPerPage": {
+      "$t": "4"
+    },
     "xmlns$gContact": "http://schemas.google.com/contact/2008",
     "openSearch$startIndex": {
       "$t": "1"
     },
     "xmlns$batch": "http://schemas.google.com/gdata/batch",
     "xmlns": "http://www.w3.org/2005/Atom",
-    "link": [{
-      "href": "https://www.google.com/",
-      "type": "text/html",
-      "rel": "alternate"
-    }, {
-      "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full",
-      "type": "application/atom+xml",
-      "rel": "http://schemas.google.com/g/2005#feed"
-    }, {
-      "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full",
-      "type": "application/atom+xml",
-      "rel": "http://schemas.google.com/g/2005#post"
-    }, {
-      "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/batch",
-      "type": "application/atom+xml",
-      "rel": "http://schemas.google.com/g/2005#batch"
-    }, {
-      "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full?max-results=9999&alt=json",
-      "type": "application/atom+xml",
-      "rel": "self"
-    }],
-    "xmlns$openSearch": "http://a9.com/-/spec/opensearchrss/1.0/",
-    "openSearch$itemsPerPage": {
-      "$t": "9999"
-    },
-    "entry": [{
-      "category": [{
-        "term": "http://schemas.google.com/contact/2008#contact",
-        "scheme": "http://schemas.google.com/g/2005#kind"
-      }],
-      "updated": {
-        "$t": "2013-10-07T10:27:31.509Z"
+    "link": [
+      {
+        "href": "https://www.google.com/",
+        "type": "text/html",
+        "rel": "alternate"
       },
-      "title": {
-        "$t": "Friend one",
-        "type": "text"
+      {
+        "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full",
+        "type": "application/atom+xml",
+        "rel": "http://schemas.google.com/g/2005#feed"
       },
-      "gd$phoneNumber": [{
-        "$t": "+441111111111",
-        "uri": "tel:+44-1111-111111",
-        "rel": "http://schemas.google.com/g/2005#mobile"
-      }],
-      "link": [{
-        "href": "https://www.google.com/m8/feeds/photos/media/test.user%40gmail.com/b9e75c8f9c3c28/1B2M2Y8AsgTpgAmY7PhCfg",
-        "type": "image/*",
-        "rel": "http://schemas.google.com/contacts/2008/rel#edit-photo"
-      }, {
-        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/b9e75c8f9c3c28",
+      {
+        "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full",
+        "type": "application/atom+xml",
+        "rel": "http://schemas.google.com/g/2005#post"
+      },
+      {
+        "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full/batch",
+        "type": "application/atom+xml",
+        "rel": "http://schemas.google.com/g/2005#batch"
+      },
+      {
+        "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full?max-results=4&alt=json",
         "type": "application/atom+xml",
         "rel": "self"
-      }, {
-        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/b9e75c8f9c3c28/1381141651509001",
+      },
+      {
+        "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full?max-results=4&alt=json&start-index=5",
         "type": "application/atom+xml",
-        "rel": "edit"
-      }],
-      "id": {
-        "$t": "http://www.google.com/m8/feeds/contacts/test.user%40gmail.com/base/b9e75c8f9c3c28"
+        "rel": "next"
       }
-    }, {
-      "category": [{
-        "term": "http://schemas.google.com/contact/2008#contact",
-        "scheme": "http://schemas.google.com/g/2005#kind"
-      }],
-      "updated": {
-        "$t": "2016-08-11T17:29:08.406Z"
+    ],
+    "xmlns$openSearch": "http://a9.com/-/spec/opensearch/1.1/",
+    "gd$etag": "\"RHg_eDVSLyt7I2A9XR9SEk4CRQA.\"",
+    "entry": [
+      {
+        "category": [
+          {
+            "term": "http://schemas.google.com/contact/2008#contact",
+            "scheme": "http://schemas.google.com/g/2005#kind"
+          }
+        ],
+        "updated": {
+          "$t": "2017-04-03T16:19:26.941Z"
+        },
+        "gContact$groupMembershipInfo": [
+          {
+            "deleted": "false",
+            "href": "http://www.google.com/m8/feeds/groups/synctest1978%40gmail.com/base/77719cc38c23b820"
+          }
+        ],
+        "gd$name": {
+          "gd$familyName": {
+            "$t": "Youfeed Fivespan Photobug"
+          },
+          "gd$givenName": {
+            "$t": "Brian Matthew"
+          },
+          "gd$fullName": {
+            "$t": "Brian Matthew Youfeed Fivespan Photobug"
+          }
+        },
+        "title": {
+          "$t": "Brian Matthew Youfeed Fivespan Photobug"
+        },
+        "link": [
+          {
+            "href": "https://www.google.com/m8/feeds/photos/media/synctest1978%40gmail.com/119460f356ea0",
+            "type": "image/*",
+            "rel": "http://schemas.google.com/contacts/2008/rel#photo"
+          },
+          {
+            "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full/119460f356ea0",
+            "type": "application/atom+xml",
+            "rel": "self"
+          },
+          {
+            "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full/119460f356ea0",
+            "type": "application/atom+xml",
+            "rel": "edit"
+          }
+        ],
+        "gd$etag": "\"R3c_eTVSLyt7I2A9XR9SEk4MRAI.\"",
+        "gd$phoneNumber": [
+          {
+            "$t": "2760254846",
+            "rel": "http://schemas.google.com/g/2005#other"
+          },
+          {
+            "$t": "7527647002",
+            "uri": "tel:+44-7527-647002",
+            "rel": "http://schemas.google.com/g/2005#other"
+          }
+        ],
+        "app$edited": {
+          "xmlns$app": "http://www.w3.org/2007/app",
+          "$t": "2017-04-03T16:19:26.941Z"
+        },
+        "id": {
+          "$t": "http://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/base/119460f356ea0"
+        }
       },
-      "title": {
-        "$t": "WeQ4U",
-        "type": "text"
+      {
+        "category": [
+          {
+            "term": "http://schemas.google.com/contact/2008#contact",
+            "scheme": "http://schemas.google.com/g/2005#kind"
+          }
+        ],
+        "updated": {
+          "$t": "2017-04-03T16:19:26.941Z"
+        },
+        "gContact$groupMembershipInfo": [
+          {
+            "deleted": "false",
+            "href": "http://www.google.com/m8/feeds/groups/synctest1978%40gmail.com/base/77719cc38c23b820"
+          }
+        ],
+        "gd$name": {
+          "gd$familyName": {
+            "$t": "Divanoodle Photobug Midel"
+          },
+          "gd$givenName": {
+            "$t": "Cheryl Ronald"
+          },
+          "gd$fullName": {
+            "$t": "Cheryl Ronald Divanoodle Photobug Midel"
+          }
+        },
+        "title": {
+          "$t": "Cheryl Ronald Divanoodle Photobug Midel"
+        },
+        "link": [
+          {
+            "href": "https://www.google.com/m8/feeds/photos/media/synctest1978%40gmail.com/73d408a006f8f",
+            "type": "image/*",
+            "rel": "http://schemas.google.com/contacts/2008/rel#photo"
+          },
+          {
+            "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full/73d408a006f8f",
+            "type": "application/atom+xml",
+            "rel": "self"
+          },
+          {
+            "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full/73d408a006f8f",
+            "type": "application/atom+xml",
+            "rel": "edit"
+          }
+        ],
+        "gd$etag": "\"R3c_eTVSLyt7I2A9XR9SEk4MRAI.\"",
+        "gd$phoneNumber": [
+          {
+            "$t": "1859465906",
+            "uri": "tel:+44-1859-465906",
+            "rel": "http://schemas.google.com/g/2005#other"
+          },
+          {
+            "$t": "7399368706",
+            "uri": "tel:+44-7399-368706",
+            "rel": "http://schemas.google.com/g/2005#other"
+          }
+        ],
+        "app$edited": {
+          "xmlns$app": "http://www.w3.org/2007/app",
+          "$t": "2017-04-03T16:19:26.941Z"
+        },
+        "id": {
+          "$t": "http://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/base/73d408a006f8f"
+        }
       },
-      "gd$phoneNumber": [{
-        "$t": "03301240239",
-        "uri": "tel:+44-330-124-0239",
-        "rel": "http://schemas.google.com/g/2005#other"
-      }],
-      "link": [{
-        "href": "https://www.google.com/m8/feeds/photos/media/test.user%40gmail.com/2266ca40a632ffb/1B2M2Y8AsgTpgAmY7PhCfg",
-        "type": "image/*",
-        "rel": "http://schemas.google.com/contacts/2008/rel#edit-photo"
-      }, {
-        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/2266ca40a632ffb",
-        "type": "application/atom+xml",
-        "rel": "self"
-      }, {
-        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/2266ca40a632ffb/1470936548406002",
-        "type": "application/atom+xml",
-        "rel": "edit"
-      }],
-      "id": {
-        "$t": "http://www.google.com/m8/feeds/contacts/test.user%40gmail.com/base/2266ca40a632ffb"
+      {
+        "category": [
+          {
+            "term": "http://schemas.google.com/contact/2008#contact",
+            "scheme": "http://schemas.google.com/g/2005#kind"
+          }
+        ],
+        "updated": {
+          "$t": "2017-04-03T16:19:26.941Z"
+        },
+        "gContact$groupMembershipInfo": [
+          {
+            "deleted": "false",
+            "href": "http://www.google.com/m8/feeds/groups/synctest1978%40gmail.com/base/77719cc38c23b820"
+          }
+        ],
+        "gd$name": {
+          "gd$familyName": {
+            "$t": "Divavu Yodel Wordtune"
+          },
+          "gd$givenName": {
+            "$t": "Berk Colon"
+          },
+          "gd$fullName": {
+            "$t": "Berk Colon Divavu Yodel Wordtune"
+          }
+        },
+        "title": {
+          "$t": "Berk Colon Divavu Yodel Wordtune"
+        },
+        "link": [
+          {
+            "href": "https://www.google.com/m8/feeds/photos/media/synctest1978%40gmail.com/7ea150cce6926",
+            "type": "image/*",
+            "rel": "http://schemas.google.com/contacts/2008/rel#photo"
+          },
+          {
+            "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full/7ea150cce6926",
+            "type": "application/atom+xml",
+            "rel": "self"
+          },
+          {
+            "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full/7ea150cce6926",
+            "type": "application/atom+xml",
+            "rel": "edit"
+          }
+        ],
+        "gd$etag": "\"R3c_eTVSLyt7I2A9XR9SEk4MRAI.\"",
+        "gd$phoneNumber": [
+          {
+            "$t": "2210213667",
+            "rel": "http://schemas.google.com/g/2005#other"
+          },
+          {
+            "$t": "7407798388",
+            "uri": "tel:+44-7407-798388",
+            "rel": "http://schemas.google.com/g/2005#other"
+          }
+        ],
+        "app$edited": {
+          "xmlns$app": "http://www.w3.org/2007/app",
+          "$t": "2017-04-03T16:19:26.941Z"
+        },
+        "id": {
+          "$t": "http://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/base/7ea150cce6926"
+        }
+      },
+      {
+        "category": [
+          {
+            "term": "http://schemas.google.com/contact/2008#contact",
+            "scheme": "http://schemas.google.com/g/2005#kind"
+          }
+        ],
+        "updated": {
+          "$t": "2017-04-03T16:19:26.941Z"
+        },
+        "gContact$groupMembershipInfo": [
+          {
+            "deleted": "false",
+            "href": "http://www.google.com/m8/feeds/groups/synctest1978%40gmail.com/base/77719cc38c23b820"
+          }
+        ],
+        "gd$name": {
+          "gd$familyName": {
+            "$t": "Works Engineering Blogtags"
+          },
+          "gd$givenName": {
+            "$t": "Melissa Jeremy"
+          },
+          "gd$fullName": {
+            "$t": "Melissa Jeremy Works Engineering Blogtags"
+          }
+        },
+        "title": {
+          "$t": "Melissa Jeremy Works Engineering Blogtags"
+        },
+        "link": [
+          {
+            "href": "https://www.google.com/m8/feeds/photos/media/synctest1978%40gmail.com/12050e8d74a3e7",
+            "type": "image/*",
+            "rel": "http://schemas.google.com/contacts/2008/rel#photo"
+          },
+          {
+            "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full/12050e8d74a3e7",
+            "type": "application/atom+xml",
+            "rel": "self"
+          },
+          {
+            "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full/12050e8d74a3e7",
+            "type": "application/atom+xml",
+            "rel": "edit"
+          }
+        ],
+        "gd$etag": "\"R3c_eTVSLyt7I2A9XR9SEk4MRAI.\"",
+        "gd$phoneNumber": [
+          {
+            "$t": "2337193079",
+            "rel": "http://schemas.google.com/g/2005#other"
+          },
+          {
+            "$t": "7680688406",
+            "rel": "http://schemas.google.com/g/2005#other"
+          }
+        ],
+        "app$edited": {
+          "xmlns$app": "http://www.w3.org/2007/app",
+          "$t": "2017-04-03T16:19:26.941Z"
+        },
+        "id": {
+          "$t": "http://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/base/12050e8d74a3e7"
+        }
+      },
+      {
+        "category": [
+          {
+            "term": "http://schemas.google.com/contact/2008#contact",
+            "scheme": "http://schemas.google.com/g/2005#kind"
+          }
+        ],
+        "updated": {
+          "$t": "2017-04-04T16:31:11.758Z"
+        },
+        "gContact$groupMembershipInfo": [
+          {
+            "deleted": "true",
+            "href": "http://www.google.com/m8/feeds/groups/synctest1978%40gmail.com/base/6"
+          }
+        ],
+        "title": {
+          "$t": ""
+        },
+        "link": [
+          {
+            "href": "https://www.google.com/m8/feeds/photos/media/synctest1978%40gmail.com/127f9bff89299cf0",
+            "type": "image/*",
+            "rel": "http://schemas.google.com/contacts/2008/rel#photo"
+          },
+          {
+            "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full/127f9bff89299cf0",
+            "type": "application/atom+xml",
+            "rel": "self"
+          },
+          {
+            "href": "https://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/full/127f9bff89299cf0",
+            "type": "application/atom+xml",
+            "rel": "edit"
+          }
+        ],
+        "gd$etag": "\"QHk-cDVSLSt7I2A9XR9SE08JQwM.\"",
+        "gd$deleted": {},
+        "app$edited": {
+          "xmlns$app": "http://www.w3.org/2007/app",
+          "$t": "2017-04-04T16:31:11.758Z"
+        },
+        "id": {
+          "$t": "http://www.google.com/m8/feeds/contacts/synctest1978%40gmail.com/base/127f9bff89299cf0"
+        }
       }
-    }, {
-      "category": [{
-        "term": "http://schemas.google.com/contact/2008#contact",
-        "scheme": "http://schemas.google.com/g/2005#kind"
-      }],
-      "updated": {
-        "$t": "2017-01-07T15:40:34.861Z"
-      },
-      "title": {
-        "$t": "Friend Two",
-        "type": "text"
-      },
-      "link": [{
-        "href": "https://www.google.com/m8/feeds/photos/media/test.user%40gmail.com/23d86d98897a316/1B2M2Y8AsgTpgAmY7PhCfg",
-        "type": "image/*",
-        "rel": "http://schemas.google.com/contacts/2008/rel#edit-photo"
-      }, {
-        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/23d86d98897a316",
-        "type": "application/atom+xml",
-        "rel": "self"
-      }, {
-        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/23d86d98897a316/1483803634861001",
-        "type": "application/atom+xml",
-        "rel": "edit"
-      }],
-      "gd$email": [{
-        "primary": "true",
-        "rel": "http://schemas.google.com/g/2005#other",
-        "address": "friend.two@gmail.com"
-      }],
-      "id": {
-        "$t": "http://www.google.com/m8/feeds/contacts/test.user%40gmail.com/base/23d86d98897a316"
-      }
-    }, {
-      "category": [{
-        "term": "http://schemas.google.com/contact/2008#contact",
-        "scheme": "http://schemas.google.com/g/2005#kind"
-      }],
-      "updated": {
-        "$t": "2013-10-28T21:53:46.628Z"
-      },
-      "title": {
-        "$t": "Friend Three",
-        "type": "text"
-      },
-      "gd$phoneNumber": [{
-        "$t": "+441111111112",
-        "uri": "tel:+44-1111-111112",
-        "rel": "http://schemas.google.com/g/2005#mobile"
-      }],
-      "link": [{
-        "href": "https://www.google.com/m8/feeds/photos/media/test.user%40gmail.com/25f17250f3cd787/1B2M2Y8AsgTpgAmY7PhCfg",
-        "type": "image/*",
-        "rel": "http://schemas.google.com/contacts/2008/rel#edit-photo"
-      }, {
-        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/25f17250f3cd787",
-        "type": "application/atom+xml",
-        "rel": "self"
-      }, {
-        "href": "https://www.google.com/m8/feeds/contacts/test.user%40gmail.com/full/25f17250f3cd787/1382997226628001",
-        "type": "application/atom+xml",
-        "rel": "edit"
-      }],
-      "id": {
-        "$t": "http://www.google.com/m8/feeds/contacts/test.user%40gmail.com/base/25f17250f3cd787"
-      }
-    }],
+    ],
     "openSearch$totalResults": {
-      "$t": "106"
+      "$t": "4999"
     },
     "id": {
-      "$t": "test.user@gmail.com"
+      "$t": "synctest1978@gmail.com"
     }
   },
   "version": "1.0",

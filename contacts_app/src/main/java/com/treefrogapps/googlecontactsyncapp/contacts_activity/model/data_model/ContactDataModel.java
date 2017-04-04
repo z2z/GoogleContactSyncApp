@@ -106,17 +106,18 @@ public class ContactDataModel {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ContactEntry {
 
-        @JsonProperty("title") private Title title;
+        @JsonProperty("gd$name") private ContactName contactName;
         @JsonProperty("gd$phoneNumber") private List<PhoneNumber> phoneNumberList = new ArrayList<>();
         @JsonProperty("gd$email") private List<ContactEmail> emailList = new ArrayList<>();
         @JsonProperty("id") private ContactId contactId;
+        @JsonProperty("gContact$groupMembershipInfo") private List<DeleteStatus> deleteStatusList = new ArrayList<>();
 
-        public Title getTitle() {
-            return title;
+        public ContactName getContactName() {
+            return contactName;
         }
 
-        public void setTitle(Title title) {
-            this.title = title;
+        public void setContactName(ContactName contactName) {
+            this.contactName = contactName;
         }
 
         public List<PhoneNumber> getPhoneNumberList() {
@@ -142,19 +143,87 @@ public class ContactDataModel {
         public void setContactId(ContactId contactId) {
             this.contactId = contactId;
         }
+
+        public List<DeleteStatus> getDeleteStatusList() {
+            return deleteStatusList;
+        }
+
+        public void setDeleteStatusList(List<DeleteStatus> deleteStatusList) {
+            this.deleteStatusList = deleteStatusList;
+        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Title {
+    public static class ContactName {
 
-        @JsonProperty("$t") private String title;
+        @JsonProperty("gd$familyName") private FamilyName familyName;
+        @JsonProperty("gd$givenName") private FirstName firstName;
+        @JsonProperty("gd$fullName") private FullName fullname;
 
-        public String getTitle() {
-            return title;
+        public FamilyName getFamilyName() {
+            return familyName;
         }
 
-        public void setTitle(String title) {
-            this.title = title;
+        public void setFamilyName(FamilyName familyName) {
+            this.familyName = familyName;
+        }
+
+        public FirstName getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(FirstName firstName) {
+            this.firstName = firstName;
+        }
+
+        public FullName getFullname() {
+            return fullname;
+        }
+
+        public void setFullname(FullName fullname) {
+            this.fullname = fullname;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class FamilyName {
+
+        @JsonProperty("$t") private String familyName;
+
+        public String getFamilyName() {
+            return familyName;
+        }
+
+        public void setFamilyName(String familyName) {
+            this.familyName = familyName;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class FirstName {
+
+        @JsonProperty("$t") private String firstName;
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class FullName {
+
+        @JsonProperty("$t") private String fullName;
+
+        public String getFullName() {
+            return fullName;
+        }
+
+        public void setFullName(String fullName) {
+            this.fullName = fullName;
         }
     }
 
@@ -224,6 +293,20 @@ public class ContactDataModel {
 
         public void setContactId(String contactId) {
             this.contactId = contactId;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class DeleteStatus{
+
+        @JsonProperty("deleted") private String deleteStatus;
+
+        public boolean getDeleteStatus() {
+            return Boolean.parseBoolean(deleteStatus);
+        }
+
+        public void setDeleteStatus(String deleteStatus) {
+            this.deleteStatus = deleteStatus;
         }
     }
 

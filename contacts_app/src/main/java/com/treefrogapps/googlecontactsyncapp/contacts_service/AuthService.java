@@ -2,6 +2,7 @@ package com.treefrogapps.googlecontactsyncapp.contacts_service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -27,6 +28,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.treefrogapps.googlecontactsyncapp.application.ContactsApplication.getApplicationComponent;
+import static com.treefrogapps.googlecontactsyncapp.common.LoginAccessIntent.*;
 import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.AUTH_TOKEN_END_POINT;
 import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.createBody;
 import static com.treefrogapps.googlecontactsyncapp.contacts_service.AuthUtils.createRefreshBody;
@@ -44,6 +46,7 @@ public class AuthService extends Service {
     @Inject OkHttpClient client;
     @Inject ContactsApiClient contactsApiClient;
     @Inject PeopleApiClient peopleApiClient;
+    @Inject SharedPreferences preferences;
 
     @Override public void onCreate() {
         super.onCreate();
@@ -121,13 +124,14 @@ public class AuthService extends Service {
 
             @Override public void onResponse(Call call, Response response) throws IOException {
                 Log.i(TAG, "Response Code : " + response.code());
-
                 if (response.isSuccessful()) {
                     String responseString = response.body().string();
                     Log.i(TAG, responseString);
                     LocalBroadcastManager.getInstance(AuthService.this)
                             .sendBroadcast(new LoginAccessIntent(getAccessToken(responseString),
-                                    getRefreshToken(responseString), getAccessTokenTimeout(responseString)));
+                                    getRefreshToken(responseString) != null ? getRefreshToken(responseString) :
+                                            preferences.getString(REFRESH_TOKEN_EXTRA, null),
+                                    getAccessTokenTimeout(responseString)));
                 }
             }
         });

@@ -3,6 +3,7 @@ package com.treefrogapps.googlecontactsyncapp.contacts_activity.view;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -16,6 +17,7 @@ import com.treefrogapps.googlecontactsyncapp.common.base_classes.BaseActivity;
 import com.treefrogapps.googlecontactsyncapp.common.base_interfaces.IContext;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.MVP;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.di.ContactsActivityModule;
+import com.treefrogapps.googlecontactsyncapp.contacts_activity.model.SyncType;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.presenter.ContactsPresenter;
 
 import java.util.List;
@@ -55,8 +57,7 @@ public class ContactsActivity extends BaseActivity<MVP.IContactsView, MVP.IConta
         contactsPagerAdapter = new ContactsPagerAdapter(getSupportFragmentManager(), tabs);
 
         setUpDisplay();
-
-        getPresenter().makeApiCall();
+        getPresenter().makeApiCall(SyncType.FULL);
     }
 
     private void setUpDisplay() {
@@ -166,5 +167,9 @@ public class ContactsActivity extends BaseActivity<MVP.IContactsView, MVP.IConta
         } else {
             getPresenter().requestPermissions(this, PERMISSION_REQUEST_CODE);
         }
+    }
+
+    @Override public ViewPager getViewPager() {
+        return viewPager;
     }
 }

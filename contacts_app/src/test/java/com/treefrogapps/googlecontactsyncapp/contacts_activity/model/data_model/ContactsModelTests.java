@@ -20,11 +20,11 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(JUnit4.class)
 public class ContactsModelTests {
 
-    private static final String TEST_AUTHOR = "Test User";
-    private static final String TEST_USER_EMAIL = "test.user@gmail.com";
-    private static final String TEST_USER_CONTACT_ENTRY_TITLE = "Friend one";
-    private static final String TEST_USER_CONTACT_ENTRY_PHONE_NUMBER = "+441111111111";
-    private static final int TEST_USER_CONTACT_COUNT = 4;
+    private static final String TEST_AUTHOR = "Sync Test";
+    private static final String TEST_USER_EMAIL = "synctest1978@gmail.com";
+    private static final String TEST_USER_CONTACT_ENTRY_TITLE = "Brian Matthew Youfeed Fivespan Photobug";
+    private static final String TEST_USER_CONTACT_ENTRY_PHONE_NUMBER = "2760254846";
+    private static final int TEST_USER_CONTACT_COUNT = 5;
 
     private String jsonResponse;
 
@@ -42,7 +42,7 @@ public class ContactsModelTests {
         jsonResponse = builder.toString();
     }
 
-    @Test public void givenXMLContactDataModelResponse_testObjectIsNotNull() throws Exception {
+    @Test public void givenJSONContactDataModelResponse_testObjectIsNotNull() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -51,7 +51,7 @@ public class ContactsModelTests {
         assertNotNull(contactDataModel);
     }
 
-    @Test public void givenXMLContactDataModelResponse_testObjectFieldsDeserialised() throws Exception {
+    @Test public void givenJSONContactDataModelResponse_testObjectFieldsDeserialised() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -62,7 +62,27 @@ public class ContactsModelTests {
         assertEquals(TEST_AUTHOR, author.getName().getName());
         assertEquals(TEST_USER_EMAIL, author.getEmail().getEmail());
         assertEquals(TEST_USER_CONTACT_COUNT, contactDataModel.getFeed().getContactEntryList().size());
-        assertEquals(TEST_USER_CONTACT_ENTRY_TITLE, contactEntry.getTitle().getTitle());
+        assertEquals(TEST_USER_CONTACT_ENTRY_TITLE, contactEntry.getContactName().getFullname().getFullName());
         assertEquals(TEST_USER_CONTACT_ENTRY_PHONE_NUMBER, contactEntry.getPhoneNumberList().get(0).getPhoneNumber());
+    }
+
+    @Test public void givenJSONContactDataModelResponse_testThatOneUserHasBeenDeleted() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        ContactDataModel contactDataModel = mapper.readValue(jsonResponse, ContactDataModel.class);
+
+        int expectedDeleted = 1;
+        int actualDeleted = 0;
+
+        for(ContactEntry entry : contactDataModel.getFeed().getContactEntryList()){
+            if(entry.getDeleteStatusList().size() > 0){
+                if(entry.getDeleteStatusList().get(0).getDeleteStatus()){
+                     actualDeleted++;
+                }
+            }
+        }
+
+        assertEquals(expectedDeleted, actualDeleted);
     }
 }

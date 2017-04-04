@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class PeopleDataModel {
 
     @JsonProperty("connections")
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private List<Connection> connectionList = Collections.emptyList();
+    private List<Connection> connectionList = new ArrayList<>();
 
     public List<Connection> getConnectionList() {
         return connectionList;
@@ -22,7 +23,6 @@ public class PeopleDataModel {
         this.connectionList = connectionList;
     }
 
-    @JsonPropertyOrder({"resourceName", "phoneNumbers", "etag", "names", "photos"})
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Connection {
 

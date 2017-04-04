@@ -12,8 +12,11 @@ import com.treefrogapps.googlecontactsyncapp.common.base_classes.BasePresenter;
 import com.treefrogapps.googlecontactsyncapp.common.base_interfaces.IContext;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.MVP;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.model.ContactsModel;
+import com.treefrogapps.googlecontactsyncapp.contacts_activity.model.SyncType;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.view.Contact;
 import com.treefrogapps.googlecontactsyncapp.contacts_activity.view.ContactsActivity;
+import com.treefrogapps.googlecontactsyncapp.contacts_activity.view.ContactsFragment;
+import com.treefrogapps.googlecontactsyncapp.contacts_activity.view.ContactsPagerAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -109,12 +112,16 @@ public class ContactsPresenter extends BasePresenter<MVP.IContactsPresenter, MVP
         getModel().revokeAccess();
     }
 
-    @Override public void makeApiCall() {
-        getModel().makeApiCall();
+    @Override public void makeApiCall(SyncType syncType) {
+        getModel().makeApiCall(syncType);
     }
 
     @Override public void authSuccessful(boolean successful) {
         Log.i(TAG, "Login successful = " + successful);
+    }
+
+    @Override public void queryingApi() {
+        showProgressBar();
     }
 
     private boolean checkPermissions(String[] permissions) {
@@ -125,6 +132,16 @@ public class ContactsPresenter extends BasePresenter<MVP.IContactsPresenter, MVP
             }
         }
         return true;
+    }
+
+    private void showProgressBar() {
+        int count = contactsViewRef.get().getViewPager().getChildCount();
+        for(int i = 0; i < count; i++) {
+            ContactsFragment f = (ContactsFragment) ((ContactsPagerAdapter)
+                    contactsViewRef.get().getViewPager().getAdapter()).getItem(i);
+
+            f.showProgressBar();
+        }
     }
 
 }
